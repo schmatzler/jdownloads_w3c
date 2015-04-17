@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
     $html = '';
     
     if ($files) {
-		$html = '<table width="100%" class="moduletable'.$moduleclass_sfx.'">';
+		$html = '<table style="width:100%;" class="moduletable'.$moduleclass_sfx.'">';
 		
         if ($text_before <> ''){
 			$html .= '<tr><td>'.$text_before.'</td></tr>';   
@@ -108,7 +108,7 @@ defined('_JEXEC') or die;
 			$number = '';
 			if ($view_pics){
 				$size = (int)$view_pics_size;
-				$files_pic = '<img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" align="top" width="'.$size.'" height="'.$size.'" border="0" alt="" /> '; 
+				$files_pic = '<img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" style="text-align:top;border:0px;" width="'.$size.'" height="'.$size.'" alt="" /> '; 
 			}
 			if ($view_numerical_list){
 				$num = $i+1;
@@ -122,15 +122,15 @@ defined('_JEXEC') or die;
 				$link_text = '<a href="'.$link.'">'.$files[$i]->file_title.' '.$version.$files[$i]->release.'</a>';
 			}    
             
-            $html .= '<tr valign="top"><td align="'.$alignment.'">'.$number.$files_pic.$link_text.'</td>';
+            $html .= '<tr style="vertical-align:top;"><td style="text-align:'.$alignment.'">'.$number.$files_pic.$link_text.'</td>';
             
 			// add the creation date
             if ($view_date) {
 				if ($files[$i]->date_added){
 					if ($view_date_same_line){
-						$html .= '<td align="'.$date_alignment.'"><small>'.JHTML::date($files[$i]->date_added, $date_format).'</small></td>'; 
+						$html .= '<td style="text-align:'.$date_alignment.'"><small>'.JHTML::date($files[$i]->date_added, $date_format).'</small></td>'; 
 					} else {
-						$html .= '<tr valign="top"><td align="'.$date_alignment.'"><small>'.JHTML::date($files[$i]->date_added, $date_format).'</small></td>';
+						$html .= '<tr style="vertical-align:top;"><td style="text-align:"'.$date_alignment.'"><small>'.JHTML::date($files[$i]->date_added, $date_format).'</small></td>';
 					}
 				}    
 			} 
@@ -139,22 +139,22 @@ defined('_JEXEC') or die;
             // add the first download screenshot when exists and activated in options
             if ($view_thumbnails){
                 if ($first_image){
-                    $thumbnail = '<img class="img" src="'.$thumbfolder.$first_image.'" align="top" style="padding:5px;" width="'.$view_thumbnails_size.'" height="'.$view_thumbnails_size.'" border="'.$border.'" alt="'.$files[$i]->file_title.'" />';
+                    $thumbnail = '<img class="img" src="'.$thumbfolder.$first_image.'" style="text-align:top;padding:5px;border:'.$border.';" width="'.$view_thumbnails_size.'" height="'.$view_thumbnails_size.'" alt="'.$files[$i]->file_title.'" />';
                 } else {
                     // use placeholder
                     if ($view_thumbnails_dummy){
-                        $thumbnail = '<img class="img" src="'.$thumbfolder.'no_pic.gif" align="top" style="padding:5px;" width="'.$view_thumbnails_size.'" height="'.$view_thumbnails_size.'" border="'.$border.'" alt="" />';    
+                        $thumbnail = '<img class="img" src="'.$thumbfolder.'no_pic.gif" align="top" style="padding:5px;border:'.$border.';" width="'.$view_thumbnails_size.'" height="'.$view_thumbnails_size.'" alt="" />';    
                     }
                 }
-                if ($thumbnail) $html .= '<tr valign="top"><td align="'.$alignment.'">'.$thumbnail.'</td></tr>';
+                if ($thumbnail) $html .= '<tr style="vertical-align:top;"><td style="text-align:'.$alignment.';">'.$thumbnail.'</td></tr>';
             } 
 			
 			// add category info 
             if ($cat_show_text2) {
 				if ($cat_show_as_link){
-					$html .= '<tr valign="top"><td align="'.$alignment.'" style="font-size:'.$cat_show_text_size.'; color:'.$cat_show_text_color.';"><a href="index.php?option='.$option.'&amp;view=category&catid='.$files[$i]->cat_id.'&amp;Itemid='.$Itemid.'">'.$cat_show_text2.'</a></td></tr>';
+					$html .= '<tr style="vertical-align:top;"><td style="text-align:'.$alignment.';font-size:'.$cat_show_text_size.'; color:'.$cat_show_text_color.';"><a href="index.php?option='.$option.'&amp;view=category&catid='.$files[$i]->cat_id.'&amp;Itemid='.$Itemid.'">'.$cat_show_text2.'</a></td></tr>';
 				} else {    
-					$html .= '<tr valign="top"><td align="'.$alignment.'" style="font-size:'.$cat_show_text_size.'; color:'.$cat_show_text_color.';">'.$cat_show_text2.'</td></tr>';
+					$html .= '<tr style="vertical-align:top;"><td style="text-align:'.$alignment.';font-size:'.$cat_show_text_size.'; color:'.$cat_show_text_color.';">'.$cat_show_text2.'</td></tr>';
 				}
 			}    
 		}

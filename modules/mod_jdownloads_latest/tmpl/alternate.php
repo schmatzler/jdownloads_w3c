@@ -108,7 +108,8 @@ defined('_JEXEC') or die;
 			$number = '';
 			if ($view_pics){
 				$size = (int)$view_pics_size;
-				$files_pic = '<img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" align="top" width="'.$size.'" height="'.$size.'" border="0" alt="" /> '; 
+				$files_pic = '<img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" width="'.$size.'" height="'.$size.'" style="border: 0px; vertical-align: top;"'.' alt="" /> ';
+ 
 			}
 			if ($view_numerical_list){
 				$num = $i+1;
@@ -137,10 +138,10 @@ defined('_JEXEC') or die;
             // add the first download screenshot when exists and activated in options
             if ($view_thumbnails){
                 if ($first_image){
-                    $thumbnail = '<img class="img" src="'.$thumbfolder.$first_image.'" style="padding:5px;" width="'.$view_thumbnails_size.'" height="'.$view_thumbnails_size.'" border="'.$border.'" alt="'.$files[$i]->file_title.'" />';
+                    $thumbnail = '<img class="img" src="'.$thumbfolder.$first_image.'" style="padding:5px;border:'.$border.'" width="'.$view_thumbnails_size.'" height="'.$view_thumbnails_size.'" alt="'.$files[$i]->file_title.'" />';
                 } else {
                     if ($view_thumbnails_dummy){
-                        $thumbnail = '<img class="img" src="'.$thumbfolder.'no_pic.gif" style="padding:5px;" width="'.$view_thumbnails_size.'" height="'.$view_thumbnails_size.'" border="'.$border.'" alt="" />';
+                        $thumbnail = '<img class="img" src="'.$thumbfolder.'no_pic.gif" style="padding:5px;border:'.$border.'" width="'.$view_thumbnails_size.'" height="'.$view_thumbnails_size.'" alt="" />';
                     }    
                 }
                 if ($thumbnail) $html .= '<div style="padding-bottom: 3px; text-align:'.$alignment.'">'.$thumbnail.'</div>';
