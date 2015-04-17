@@ -314,7 +314,7 @@ $limits = $this->get('user_limits');
                     <?php echo $this->form->getInput('url_download'); ?>
                     <span>
                         &nbsp;<input type="button" value="" class="button_rename" title="<?php echo JText::_('COM_JDOWNLOADS_FORM_RENAME_FILE_LABEL'); ?>" name="activateFileNameField" onClick="editFilename();" >&nbsp;
-                        <?php echo ' <a href="index.php?option=com_jdownloads&amp;task=download.deletefile&amp;id='.$this->item->file_id.'"><img src="'.JURI::root().'administrator/components/com_jdownloads/assets/images/'.'delete.png'.'" width="18px" height="18px" border="0" style="vertical-align:middle;" alt="'.JText::_('COM_JDOWNLOADS_FORM_DELETE_FILE_LABEL').'" title="'.JText::_('COM_JDOWNLOADS_FORM_DELETE_FILE_LABEL').'" /></a>'; ?>
+                        <?php echo ' <a href="index.php?option=com_jdownloads&amp;task=download.deletefile&amp;id='.$this->item->file_id.'"><img src="'.JURI::root().'administrator/components/com_jdownloads/assets/images/'.'delete.png'.'" width="18px" height="18px" style="vertical-align:middle;border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FORM_DELETE_FILE_LABEL').'" title="'.JText::_('COM_JDOWNLOADS_FORM_DELETE_FILE_LABEL').'" /></a>'; ?>
                     </span>
                 </div>        
            <?php }                               
@@ -354,7 +354,7 @@ $limits = $this->get('user_limits');
                     <?php echo $this->form->getInput('preview_filename'); ?>
                     <span>
                         &nbsp;<input type="button" value="" class="button_rename" title="<?php echo JText::_('COM_JDOWNLOADS_FORM_RENAME_FILE_LABEL'); ?>" name="activateFilePrevNameField" onClick="editFilenamePreview();" >&nbsp;
-                        <?php echo ' <a href="index.php?option=com_jdownloads&amp;task=download.deletefile&amp;id='.$this->item->file_id.'&amp;type=prev"><img src="'.JURI::root().'administrator/components/com_jdownloads/assets/images/'.'delete.png'.'" width="18px" height="18px" border="0" style="vertical-align:middle;" alt="'.JText::_('COM_JDOWNLOADS_FORM_DELETE_FILE_LABEL').'" title="'.JText::_('COM_JDOWNLOADS_FORM_DELETE_FILE_LABEL').'" /></a>'; ?>
+                        <?php echo ' <a href="index.php?option=com_jdownloads&amp;task=download.deletefile&amp;id='.$this->item->file_id.'&amp;type=prev"><img src="'.JURI::root().'administrator/components/com_jdownloads/assets/images/'.'delete.png'.'" width="18px" height="18px" style="vertical-align:middle;border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FORM_DELETE_FILE_LABEL').'" title="'.JText::_('COM_JDOWNLOADS_FORM_DELETE_FILE_LABEL').'" /></a>'; ?>
                     </span>                    
                 </div>        
             <?php endif;?>            
@@ -426,7 +426,7 @@ $limits = $this->get('user_limits');
                    <legend><?php echo JText::_('COM_JDOWNLOADS_FORM_LABEL_TAB_IMAGES'); ?></legend>
                     <?php $image_id = 0; ?>
                     <?php if ($this->item->images){ ?>    
-                        <table class="admintable" width="100%" border="0" cellpadding="0" cellspacing="10">
+                        <table class="admintable" style="width:100%;border=0px;" cellpadding="0" cellspacing="10">
                         <tr><td><?php if ($this->item->images) echo JText::_('COM_JDOWNLOADS_THUMBNAIL_LIST_INFO'); ?></td></tr>
                         <tr>
                         <td valign="top">
@@ -448,7 +448,7 @@ $limits = $this->get('user_limits');
                                         padding: 0;" type="checkbox" name="keep_image['.$image_id.']" value="'.$image.'" checked />';
                                  echo '<a href="'.JURI::root().'images/jdownloads/screenshots/'.$image.'" target="_blank">';
                                  
-                                 echo '<img border="0" style="position:relative;border:1px solid black; max-width:100px; max-height:100px;" align="middle" src="'.JURI::root().'images/jdownloads/screenshots/thumbnails/'.$image.'" alt="'.$image.'" title="'.$image.'" />';
+                                 echo '<img style="position:relative;border:1px solid black; max-width:100px; max-height:100px;" align="middle" src="'.JURI::root().'images/jdownloads/screenshots/thumbnails/'.$image.'" alt="'.$image.'" title="'.$image.'" />';
                                  echo '</a>';
                                  echo '</li>';                         
                             }
@@ -466,7 +466,7 @@ $limits = $this->get('user_limits');
                              <label>
                              <?php  echo JHtml::_('tooltip', JText::_('COM_JDOWNLOADS_FORM_IMAGE_UPLOAD_DESC'), JText::_('COM_JDOWNLOADS_FORM_IMAGE_UPLOAD_LABEL').' '.JText::sprintf('COM_JDOWNLOADS_LIMIT_IMAGES_MSG', $rules->uploads_max_amount_images), '', JText::_('COM_JDOWNLOADS_FORM_IMAGE_UPLOAD_LABEL').' '.JText::sprintf('COM_JDOWNLOADS_LIMIT_IMAGES_MSG', $rules->uploads_max_amount_images) ); ?>
                              </label>
-                            <table id="files_table" class="admintable" border="0" cellpadding="0" cellspacing="10">
+                            <table id="files_table" class="admintable" style="border=0px;" cellpadding="0" cellspacing="10">
                             <tr id="new_file_row">
                             <td class=""><input type="file" name="file_upload_thumb[0]" id="file_upload_thumb[0]" size="40" accept="image/gif,image/jpeg,image/jpg,image/png" onchange="add_new_image_file(this)" />
                             </td>

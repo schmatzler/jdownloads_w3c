@@ -136,11 +136,11 @@
         if (!isset($menuItemids['upload'])) $menuItemids['upload'] = $menuItemids['root'];
         
         // build home link        
-        $home_link = '<a href="'.JRoute::_('index.php?option=com_jdownloads&amp;Itemid='.$menuItemids['root']).'">'.'<img src="'.JURI::base().'components/com_jdownloads/assets/images/home_fe.png" width="32" height="32" border="0" alt="'.JText::_('COM_JDOWNLOADS_HOME_LINKTEXT').'" /></a> <a href="'.JRoute::_('index.php?option=com_jdownloads&amp;Itemid='.$menuItemids['root']).'">'.JText::_('COM_JDOWNLOADS_HOME_LINKTEXT').'</a>';
+        $home_link = '<a href="'.JRoute::_('index.php?option=com_jdownloads&amp;Itemid='.$menuItemids['root']).'">'.'<img src="'.JURI::base().'components/com_jdownloads/assets/images/home_fe.png" width="32" height="32" style="border:0px;" alt="'.JText::_('COM_JDOWNLOADS_HOME_LINKTEXT').'" /></a> <a href="'.JRoute::_('index.php?option=com_jdownloads&amp;Itemid='.$menuItemids['root']).'">'.JText::_('COM_JDOWNLOADS_HOME_LINKTEXT').'</a>';
         // build search link
-        $search_link = '<a href="'.JRoute::_('index.php?option=com_jdownloads&amp;view=search&amp;Itemid='.$menuItemids['search']).'">'.'<img src="'.JURI::base().'components/com_jdownloads/assets/images/search.png" width="32" height="32" border="0" alt="'.JText::_('COM_JDOWNLOADS_SEARCH_LINKTEXT').'" /></a> <a href="'.JRoute::_('index.php?option=com_jdownloads&amp;view=search&amp;Itemid='.$menuItemids['search'].'').'">'.JText::_('COM_JDOWNLOADS_SEARCH_LINKTEXT').'</a>';
+        $search_link = '<a href="'.JRoute::_('index.php?option=com_jdownloads&amp;view=search&amp;Itemid='.$menuItemids['search']).'">'.'<img src="'.JURI::base().'components/com_jdownloads/assets/images/search.png" width="32" height="32" style="border:0px;" alt="'.JText::_('COM_JDOWNLOADS_SEARCH_LINKTEXT').'" /></a> <a href="'.JRoute::_('index.php?option=com_jdownloads&amp;view=search&amp;Itemid='.$menuItemids['search'].'').'">'.JText::_('COM_JDOWNLOADS_SEARCH_LINKTEXT').'</a>';
         // build frontend upload link
-        $upload_link = '<a href="'.JRoute::_('index.php?option=com_jdownloads&amp;view=form&amp;layout=edit&amp;Itemid='.$menuItemids['upload']).'">'.'<img src="'.JURI::base().'components/com_jdownloads/assets/images/upload.png" width="32" height="32" border="0" alt="'.JText::_('COM_JDOWNLOADS_UPLOAD_LINKTEXT').'" /></a> <a href="'.JRoute::_('index.php?option=com_jdownloads&amp;view=form&amp;layout=edit&amp;Itemid='.$menuItemids['upload'].'').'">'.JText::_('COM_JDOWNLOADS_UPLOAD_LINKTEXT').'</a>';
+        $upload_link = '<a href="'.JRoute::_('index.php?option=com_jdownloads&amp;view=form&amp;layout=edit&amp;Itemid='.$menuItemids['upload']).'">'.'<img src="'.JURI::base().'components/com_jdownloads/assets/images/upload.png" width="32" height="32" style="border:0px;" alt="'.JText::_('COM_JDOWNLOADS_UPLOAD_LINKTEXT').'" /></a> <a href="'.JRoute::_('index.php?option=com_jdownloads&amp;view=form&amp;layout=edit&amp;Itemid='.$menuItemids['upload'].'').'">'.JText::_('COM_JDOWNLOADS_UPLOAD_LINKTEXT').'</a>';
 
         $header = str_replace('{home_link}', $home_link, $header);
         $header = str_replace('{search_link}', $search_link, $header);
@@ -158,10 +158,10 @@
             // exists a single category menu link for the category a level up? 
             $level_up_cat_itemid = JDHelper::getSingleCategoryMenuID($cat_link_itemids, $menuItemids['upper'], $root_itemid);
             $upper_link = JRoute::_('index.php?option=com_jdownloads&amp;view=category&amp;catid='.$menuItemids['upper'].'&amp;Itemid='.$level_up_cat_itemid);
-            $header = str_replace('{upper_link}', '<a href="'.$upper_link.'">'.'<img src="'.JURI::base().'components/com_jdownloads/assets/images/upper.png" width="32" height="32" border="0" alt="'.JText::_('COM_JDOWNLOADS_UPPER_LINKTEXT').'" /></a> <a href="'.$upper_link.'">'.JText::_('COM_JDOWNLOADS_UPPER_LINKTEXT').'</a>', $header);    
+            $header = str_replace('{upper_link}', '<a href="'.$upper_link.'">'.'<img src="'.JURI::base().'components/com_jdownloads/assets/images/upper.png" width="32" height="32" style="border:0px;" alt="'.JText::_('COM_JDOWNLOADS_UPPER_LINKTEXT').'" /></a> <a href="'.$upper_link.'">'.JText::_('COM_JDOWNLOADS_UPPER_LINKTEXT').'</a>', $header);    
         } else {
             $upper_link = JRoute::_('index.php?option=com_jdownloads&amp;view=categories&amp;Itemid='.$menuItemids['root']);
-            $header = str_replace('{upper_link}', '<a href="'.$upper_link.'">'.'<img src="'.JURI::base().'components/com_jdownloads/assets/images/upper.png" width="32" height="32" border="0" alt="'.JText::_('COM_JDOWNLOADS_UPPER_LINKTEXT').'" /></a> <a href="'.$upper_link.'">'.JText::_('COM_JDOWNLOADS_UPPER_LINKTEXT').'</a>', $header);            
+            $header = str_replace('{upper_link}', '<a href="'.$upper_link.'">'.'<img src="'.JURI::base().'components/com_jdownloads/assets/images/upper.png" width="32" height="32" style="border:0px;" alt="'.JText::_('COM_JDOWNLOADS_UPPER_LINKTEXT').'" /></a> <a href="'.$upper_link.'">'.JText::_('COM_JDOWNLOADS_UPPER_LINKTEXT').'</a>', $header);            
         }
         
         // create category listbox and viewed it when it is activated in configuration
@@ -200,7 +200,7 @@
             
             $listbox = JHtml::_('select.genericlist', $data['options'], 'cat_list', 'class="inputbox" onchange="gocat(\''.$root_url.'\', \''.$uncat_url.'\', \''.$allfiles_url.'\', \''.$topfiles_url.'\',  \''.$newfiles_url.'\'  ,\''.$data['url'].'\')"', 'value', 'text', $data['selected'] ); 
             
-            $header = str_replace('{category_listbox}', '<form name="go_cat" id="go_cat" action="" method="post">'.$listbox.'</form>', $header);
+            $header = str_replace('{category_listbox}', '<form name="go_cat" id="go_cat" method="post">'.$listbox.'</form>', $header);
         } else {                                                                        
             $header = str_replace('{category_listbox}', '', $header);         
         }
@@ -320,15 +320,15 @@
         // build the mini image symbols when used in layout ( 0 = activated !!! )
         if ($use_mini_icons) {
             $msize =  $jlistConfig['info.icons.size'];
-            $pic_date = '<img src="'.JURI::base().'images/jdownloads/miniimages/date.png" align="middle" width="'.$msize.'" height="'.$msize.'" border="0" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_DATE').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_DATE').'" />&nbsp;';
-            $pic_license = '<img src="'.JURI::base().'images/jdownloads/miniimages/license.png" align="middle" width="'.$msize.'" height="'.$msize.'" border="0" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_LICENCE').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_LICENCE').'" />&nbsp;';
-            $pic_author = '<img src="'.JURI::base().'images/jdownloads/miniimages/contact.png" align="middle" width="'.$msize.'" height="'.$msize.'" border="0" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_AUTHOR').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_AUTHOR').'" />&nbsp;';
-            $pic_website = '<img src="'.JURI::base().'images/jdownloads/miniimages/weblink.png" align="middle" width="'.$msize.'" height="'.$msize.'" border="0" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_WEBSITE').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_WEBSITE').'" />&nbsp;';
-            $pic_system = '<img src="'.JURI::base().'images/jdownloads/miniimages/system.png" align="middle" width="'.$msize.'" height="'.$msize.'" border="0" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_SYSTEM').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_SYSTEM').'" />&nbsp;';
-            $pic_language = '<img src="'.JURI::base().'images/jdownloads/miniimages/language.png" align="middle" width="'.$msize.'" height="'.$msize.'" border="0" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_LANGUAGE').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_LANGUAGE').'" />&nbsp;';
-            $pic_downloads = '<img src="'.JURI::base().'images/jdownloads/miniimages/download.png" align="middle" width="'.$msize.'" height="'.$msize.'" border="0" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_DOWNLOAD').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_DOWNLOAD_HITS').'" />&nbsp;';
-            $pic_price = '<img src="'.JURI::base().'images/jdownloads/miniimages/currency.png" align="middle" width="'.$msize.'" height="'.$msize.'" border="0" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_PRICE').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_PRICE').'" />&nbsp;';
-            $pic_size = '<img src="'.JURI::base().'images/jdownloads/miniimages/stuff.png" align="middle" width="'.$msize.'" height="'.$msize.'" border="0" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_FILESIZE').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_FILESIZE').'" />&nbsp;';
+            $pic_date = '<img src="'.JURI::base().'images/jdownloads/miniimages/date.png" style="text-align:middle;width:'.$msize.';height:'.$msize.';border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_DATE').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_DATE').'" />&nbsp;';
+            $pic_license = '<img src="'.JURI::base().'images/jdownloads/miniimages/license.png" style="text-align:middle;width:'.$msize.';height:'.$msize.';border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_LICENCE').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_LICENCE').'" />&nbsp;';
+            $pic_author = '<img src="'.JURI::base().'images/jdownloads/miniimages/contact.png" style="text-align:middle;width:'.$msize.';height:'.$msize.';border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_AUTHOR').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_AUTHOR').'" />&nbsp;';
+            $pic_website = '<img src="'.JURI::base().'images/jdownloads/miniimages/weblink.png" style="text-align:middle;width:'.$msize.';height:'.$msize.';border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_WEBSITE').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_WEBSITE').'" />&nbsp;';
+            $pic_system = '<img src="'.JURI::base().'images/jdownloads/miniimages/system.png" style="text-align:middle;width:'.$msize.';height:'.$msize.';border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_SYSTEM').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_SYSTEM').'" />&nbsp;';
+            $pic_language = '<img src="'.JURI::base().'images/jdownloads/miniimages/language.png" style="text-align:middle;width:'.$msize.';height:'.$msize.';border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_LANGUAGE').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_LANGUAGE').'" />&nbsp;';
+            $pic_downloads = '<img src="'.JURI::base().'images/jdownloads/miniimages/download.png" style="text-align:middle;width:'.$msize.';height:'.$msize.';border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_DOWNLOAD').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_DOWNLOAD_HITS').'" />&nbsp;';
+            $pic_price = '<img src="'.JURI::base().'images/jdownloads/miniimages/currency.png" style="text-align:middle;width:'.$msize.';height:'.$msize.';border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_PRICE').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_PRICE').'" />&nbsp;';
+            $pic_size = '<img src="'.JURI::base().'images/jdownloads/miniimages/stuff.png" style="text-align:middle;width:'.$msize.';height:'.$msize.';border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_FILESIZE').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_FILESIZE').'" />&nbsp;';
         } 
         
         // create the pics for: NEW file / HOT file / file is UPDATED
@@ -837,7 +837,7 @@
                  }    
                  
                  if ($jlistConfig['use.css.buttons.instead.icons'] == '0'){
-                     $pic_download = '<img src="'.JURI::base().'images/jdownloads/downloadimages/'.$jlistConfig['download.pic.files'].'" align="middle" border="0" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_DOWNLOAD').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_DOWNLOAD').'" />';
+                     $pic_download = '<img src="'.JURI::base().'images/jdownloads/downloadimages/'.$jlistConfig['download.pic.files'].'" style="text-align:middle;border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_DOWNLOAD').'" title="'.JText::_('COM_JDOWNLOADS_FRONTEND_MINI_ICON_ALT_DOWNLOAD').'" />';
                  } else {
                     $pic_download = '';
                  } 
@@ -866,7 +866,7 @@
                     //$mirror1_link_dum = JRoute::_(JDownloadsHelperRoute::getOtherRoute($files[$i]->slug, $files[$i]->cat_id, $files[$i]->language, $url_task, 1));
                     // is the old button used?
                     if ($jlistConfig['use.css.buttons.instead.icons'] == '0'){                
-                        $mirror1_link = '<a '.$blank_window1.' href="'.$mirror1_link_dum.'" class="jd_download_url"><img src="'.JURI::base().'images/jdownloads/downloadimages/'.$jlistConfig['download.pic.mirror_1'].'" border="0" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MIRROR_URL_TITLE_1').'" /></a>';
+                        $mirror1_link = '<a '.$blank_window1.' href="'.$mirror1_link_dum.'" class="jd_download_url"><img src="'.JURI::base().'images/jdownloads/downloadimages/'.$jlistConfig['download.pic.mirror_1'].'" style="border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MIRROR_URL_TITLE_1').'" /></a>';
                     } else {
                         // we use the new css button 
                         $mirror1_link = '<a '.$blank_window1.' href="'.$mirror1_link_dum.'" alt="'.JText::_('COM_JDOWNLOADS_LINKTEXT_DOWNLOAD_URL').'" class="jdbutton '.$download_color_mirror1.' '.$download_size_mirror.'">'.JText::_('COM_JDOWNLOADS_FRONTEND_MIRROR_URL_TITLE_1').'</a>'; 
@@ -884,7 +884,7 @@
                     //$mirror2_link_dum = JRoute::_(JDownloadsHelperRoute::getOtherRoute($files[$i]->slug, $files[$i]->cat_id, $files[$i]->language, $url_task, 2));
                     // is the old button used?
                     if ($jlistConfig['use.css.buttons.instead.icons'] == '0'){                
-                        $mirror2_link = '<a '.$blank_window2.' href="'.$mirror2_link_dum.'" class="jd_download_url"><img src="'.JURI::base().'images/jdownloads/downloadimages/'.$jlistConfig['download.pic.mirror_2'].'" border="0" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MIRROR_URL_TITLE_2').'" /></a>';
+                        $mirror2_link = '<a '.$blank_window2.' href="'.$mirror2_link_dum.'" class="jd_download_url"><img src="'.JURI::base().'images/jdownloads/downloadimages/'.$jlistConfig['download.pic.mirror_2'].'" style="border:0px;" alt="'.JText::_('COM_JDOWNLOADS_FRONTEND_MIRROR_URL_TITLE_2').'" /></a>';
                     } else {
                         // we use the new css button 
                         $mirror2_link = '<a '.$blank_window2.' href="'.$mirror2_link_dum.'" alt="'.JText::_('COM_JDOWNLOADS_LINKTEXT_DOWNLOAD_URL').'" class="jdbutton '.$download_color_mirror2.' '.$download_size_mirror.'">'.JText::_('COM_JDOWNLOADS_FRONTEND_MIRROR_URL_TITLE_2').'</a>'; 
@@ -905,7 +905,7 @@
                 $detail_link_text = '<a href="'.$title_link.'">'.JText::_('COM_JDOWNLOADS_FE_DETAILS_LINK_TEXT_TO_DETAILS').'</a>';
                 // Symbol anzeigen - auch als url
                 if ($files[$i]->file_pic != '' ) {
-                    $filepic = '<a href="'.$title_link.'">'.'<img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" align="top" width="'.$jlistConfig['file.pic.size'].'" height="'.$jlistConfig['file.pic.size.height'].'" border="0" alt="'.$files[$i]->file_pic.'" /></a> ';
+                    $filepic = '<a href="'.$title_link.'">'.'<img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" style="text-align:top;width:'.$jlistConfig['file.pic.size'].';height:'.$jlistConfig['file.pic.size.height'].';border:0px;" alt="'.$files[$i]->file_pic.'" /></a> ';
                 } else {
                     $filepic = '';
                 }
@@ -925,7 +925,7 @@
                    }
                    // View file icon also with link
                    if ($files[$i]->file_pic != '' ) {
-                        $filepic = '<a href="'.$download_link.'"><img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" align="top" width="'.$jlistConfig['file.pic.size'].'" height="'.$jlistConfig['file.pic.size.height'].'" border="0" alt="'.$files[$i]->file_pic.'" /></a>';
+                        $filepic = '<a href="'.$download_link.'"><img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" style="text-align:top;width:'.$jlistConfig['file.pic.size'].';height:'.$jlistConfig['file.pic.size.height'].';border:0px;" alt="'.$files[$i]->file_pic.'" /></a>';
                    } else {
                         $filepic = '';
                    }
@@ -936,7 +936,7 @@
                     // user may not use download link
                     $html_file = str_replace('{file_title}', $files[$i]->file_title, $html_file);
                     if ($files[$i]->file_pic != '' ) {
-                        $filepic = '<img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" align="top" width="'.$jlistConfig['file.pic.size'].'" height="'.$jlistConfig['file.pic.size.height'].'" border="0" alt="'.$files[$i]->file_pic.'" />';
+                        $filepic = '<img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" style="text-align:top;width:'.$jlistConfig['file.pic.size'].';height:'.$jlistConfig['file.pic.size.height'].';border:0px;" alt="'.$files[$i]->file_pic.'" />';
                     } else {
                         $filepic = '';
                     }
@@ -945,7 +945,7 @@
             } else {
                 // no links
                 if ($files[$i]->file_pic != '' ) {
-                    $filepic = '<img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" align="top" width="'.$jlistConfig['file.pic.size'].'" height="'.$jlistConfig['file.pic.size.height'].'" border="0" alt="'.$files[$i]->file_pic.'" />';
+                    $filepic = '<img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" style="text-align:top;width:'.$jlistConfig['file.pic.size'].';height:'.$jlistConfig['file.pic.size.height'].';border:0px; alt="'.$files[$i]->file_pic.'" />';
                 } else {
                     $filepic = '';
                 }
