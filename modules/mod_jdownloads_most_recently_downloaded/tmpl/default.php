@@ -16,7 +16,7 @@
 defined('_JEXEC') or die;
     
     $html = '';
-    $html = '<table width="100%" class="moduletable'.$moduleclass_sfx.'">';
+    $html = '<table style="width:100%;" class="moduletable'.$moduleclass_sfx.'">';
     
     $sum_files = count($files);
     if ($sum_view > $sum_files) $sum_view = $sum_files;
@@ -116,7 +116,7 @@ defined('_JEXEC') or die;
             $number = '';
             if ($view_pics){
                 $size = (int)$view_pics_size;
-                $files_pic = '<img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" align="top" width="'.$size.'" height="'.$size.'" border="0" alt="" /> '; 
+                $files_pic = '<img src="'.JURI::base().'images/jdownloads/fileimages/'.$files[$i]->file_pic.'" style="text-align=top;border=0;" width="'.$size.'" height="'.$size.'" alt="" /> '; 
             }
             // build number list
             if ($view_numerical_list){
@@ -133,26 +133,26 @@ defined('_JEXEC') or die;
             } else {    
                 $link_text = '<a href="'.$link.'">'.$files[$i]->file_title.' '.$version.$files[$i]->release.'</a>';
             }    
-            $html .= '<tr valign="top"><td align="'.$alignment.'">'.$number.$files_pic.$link_text.'</td>';
+            $html .= '<tr style="vertical-align:top;"><td style="text-align='.$alignment.';">'.$number.$files_pic.$link_text.'</td>';
             
             if ($view_date) {
                     if ($view_date_text) $view_date_text .= '&nbsp;';
                     if ($view_date_same_line){
                         if ($view_user){
-                            $html .= '<td align="'.$date_alignment.'" class="td_jd_ldf_date_row">'.$view_date_text.JHTML::Date($files[$i]->log_datetime,$date_format,false).$view_user_by.' '.$files[$i]->username.'</td>';
+                            $html .= '<td style="text-align:'.$date_alignment.'" class="td_jd_ldf_date_row">'.$view_date_text.JHTML::Date($files[$i]->log_datetime,$date_format,false).$view_user_by.' '.$files[$i]->username.'</td>';
                         } else {
-                            $html .= '<td align="'.$date_alignment.'" class="td_jd_ldf_date_row">'.$view_date_text.JHTML::Date($files[$i]->log_datetime,$date_format,false).'</td>';
+                            $html .= '<td style="text-align:'.$date_alignment.'" class="td_jd_ldf_date_row">'.$view_date_text.JHTML::Date($files[$i]->log_datetime,$date_format,false).'</td>';
                         }    
                     } else {
                         if ($view_user){
-                            $html .= '</tr><tr><td align="'.$date_alignment.'" class="td_jd_ldf_date_row">'.$view_date_text.JHTML::Date($files[$i]->log_datetime,$date_format,false).$view_user_by.' '.$files[$i]->username.'</td>';
+                            $html .= '</tr><tr><td style="text-align:'.$date_alignment.'" class="td_jd_ldf_date_row">'.$view_date_text.JHTML::Date($files[$i]->log_datetime,$date_format,false).$view_user_by.' '.$files[$i]->username.'</td>';
                         } else {
-                            $html .= '</tr><tr><td align="'.$date_alignment.'" class="td_jd_ldf_date_row">'.$view_date_text.JHTML::Date($files[$i]->log_datetime,$date_format,false).'</td>';
+                            $html .= '</tr><tr><td style="text-align:'.$date_alignment.'" class="td_jd_ldf_date_row">'.$view_date_text.JHTML::Date($files[$i]->log_datetime,$date_format,false).'</td>';
                         }    
                     }    
             } else {
                 if ($view_user){
-                    $html .= '</tr><tr><td align="'.$date_alignment.'" class="td_jd_ldf_date_row">'.$view_user_by.' '.$files[$i]->username.'</td>';
+                    $html .= '</tr><tr><td style="text-align:'.$date_alignment.'" class="td_jd_ldf_date_row">'.$view_user_by.' '.$files[$i]->username.'</td>';
                 }
             }    
             $html .= '</tr>'; 
