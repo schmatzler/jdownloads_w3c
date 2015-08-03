@@ -30,7 +30,9 @@ class jdownloadsTabledownload extends JTable
 	 */
 	function __construct(&$db) 
 	{
-		parent::__construct('#__jdownloads_files', 'file_id', $db);
+        parent::__construct('#__jdownloads_files', 'file_id', $db);
+        // we need also the 'tags' functionality
+        JTableObserverTags::createObserver($this, array('typeAlias' => 'com_jdownloads.download'));        
 	}
     
 /**
@@ -184,9 +186,13 @@ class jdownloadsTabledownload extends JTable
             $filename_renamed   = false;
             $filename_new_name  = '';
             $filename_old_name  = '';
+            $use_xml_for_file_info = 0;
+            $selected_updatefile = 0;
 
             // use xml install file to fill the file informations    
-            $use_xml_for_file_info = (int)$formdata['use_xml'];
+            if (isset($formdata['use_xml'])){
+                $use_xml_for_file_info = (int)$formdata['use_xml'];
+            }
             
             // marked cat id
             if (isset($formdata['cat_id'])){
@@ -218,15 +224,25 @@ class jdownloadsTabledownload extends JTable
             }        
             
             // get selected file from server for update download?
-            $selected_updatefile = $formdata['update_file'];
+            if (isset($formdata['update_file'])){
+                $selected_updatefile = $formdata['update_file'];
+            }
 
             // When download is new created in frontend, we must do some other things... 
             if ($app->isSite() && !$auto_added){
                 if ($isNew){
                     $this->submitted_by   = $user->id;
-                    $this->set_aup_points = 1;
                     if ($user_rules->uploads_auto_publish == 1){
                         $this->published = 1;
+                    }
+                    if ($jlistConfig['use.alphauserpoints'] && $this->published == 1){
+                        // add the AUP points
+                        JDHelper::setAUPPointsUploads($this->submitted_by, $this->file_title);
+                    }
+                } else {
+                    if ($jlistConfig['use.alphauserpoints'] && $this->published == 1){
+                        // add the AUP points when an older download is published (maybe the first time)
+                        JDHelper::setAUPPointsUploads($this->submitted_by, $this->file_title);
                     }
                 }
             } else {    

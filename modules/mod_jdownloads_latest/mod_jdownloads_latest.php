@@ -15,11 +15,15 @@ require_once __DIR__ . '/helper.php';
 
     $db = JFactory::getDBO();
     JHtml::_('behavior.tooltip');
-    $current_itemid = $app->input->get('Itemid');
+    $Itemid  = JRequest::getVar("Itemid");
     
     // get published root menu link
     $db->setQuery("SELECT id from #__menu WHERE link = 'index.php?option=com_jdownloads&view=categories' and published = 1");
     $root_itemid = $db->loadResult();
+    
+    if ($root_itemid){
+        $Itemid = $root_itemid;
+    }
     
     // get this option from configuration to see whether the links shall run the download without summary page
     $db->setQuery("SELECT setting_value FROM #__jdownloads_config WHERE setting_name = 'direct.download'");

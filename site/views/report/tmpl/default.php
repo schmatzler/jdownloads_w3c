@@ -54,7 +54,8 @@ defined('_JEXEC') or die('Restricted access');
     JHtml::_('behavior.keepalive');
     JHtml::_('behavior.tooltip');
     JHtml::_('behavior.calendar');
-    JHtml::_('behavior.formvalidation');
+    JHTML::_('behavior.formvalidation');
+    // JHtml::_('behavior.formvalidator'); Joomla >= 3.4
 
     // required for captcha
     $form_uri = JFactory::getURI();

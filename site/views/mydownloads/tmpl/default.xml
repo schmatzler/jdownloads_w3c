@@ -51,6 +51,16 @@
                     <option value="0">COM_JDOWNLOADS_HIDE</option>
                     <option value="1">COM_JDOWNLOADS_SHOW</option>
                 </field>
+
+                <field
+                    name="show_tags"
+                    type="list"
+                    label="JGLOBAL_SHOW_TAGS_LABEL"
+                    description="JGLOBAL_SHOW_TAGS_DESC">
+                    <option value="">JGLOBAL_USE_GLOBAL</option>
+                    <option value="1">JSHOW</option>
+                    <option value="0">JHIDE</option>
+                </field>
                 
                 <field name="show_pagination" type="list"
                     description="COM_JDOWNLOADS_PAGINATION_DESC"
@@ -69,7 +79,7 @@
                     <option value="0">COM_JDOWNLOADS_HIDE</option>
                     <option value="1">COM_JDOWNLOADS_SHOW</option>
                 </field>
-            
+                
                 <field name="display_num" type="list"
                     description="COM_JDOWNLOADS_NUMBER_ITEMS_LIST_DESC"
                     label="COM_JDOWNLOADS_NUMBER_ITEMS_LIST_LABEL" >

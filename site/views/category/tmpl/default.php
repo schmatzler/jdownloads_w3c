@@ -169,7 +169,7 @@
         
         // components description
         if ($jlistConfig['downloads.titletext'] != '') {
-            $header_text = stripslashes($jlistConfig['downloads.titletext']);
+            $header_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.titletext']));
             if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
                 $header_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $header_text);
             } else {
@@ -191,7 +191,8 @@
 
         $header = str_replace('{home_link}', $home_link, $header);
         $header = str_replace('{search_link}', $search_link, $header);
-        if ($jlistConfig['frontend.upload.active']) {
+
+        if ($jd_user_settings->uploads_view_upload_icon){
             if ($this->view_upload_button){
                 $header = str_replace('{upload_link}', $upload_link, $header);
             } else {
@@ -362,7 +363,7 @@
         }
 
         // display category info  - but make sure, that this option only used with single column layouts
-        if (($jlistConfig['view.category.info'] && $cat_layout->cols < 2)){
+        if ($jlistConfig['view.category.info']){
             $body_cat = str_replace('{cat_title}', $this->category->title, $body_cat);
 
             // support for content plugins
@@ -382,27 +383,24 @@
             $body_cat = str_replace('{cat_info_begin}', '', $body_cat); 
             $body_cat = str_replace('{cat_info_end}', '', $body_cat);
             
+            if ($this->params->get('show_cat_tags', 1) && !empty($this->category->tags->itemTags)){
+                $this->category->tagLayout = new JLayoutFile('joomla.content.tags'); 
+                $body_cat = str_replace('{tags}', $this->category->tagLayout->render($this->category->tags->itemTags), $body_cat);   
+            } else {
+                $body_cat = str_replace('{tags}', '', $body_cat);
+            }
+            
             // remove all title html tags in top cat output
             if ($pos_end = strpos($body_cat, '{cat_title_end}')){
                 $pos_beg = strpos($body_cat, '{cat_title_begin}');
                 $body_cat = substr_replace($body_cat, '', $pos_beg, ($pos_end - $pos_beg) + 15);
             }
-        } else {
-            // we have multi column layout
-            if ($cat_layout->cols > 1 && strpos($body_cat, '{cat_title1}')){ 
-                $body_cat = str_replace('{cat_title1}', '', $body_cat);
-                for ($b=1; $b < 10; $b++){
-                    $x = (string)$b;
-                    $body_cat = str_replace("{cat_title$x}", '', $body_cat);
-                    $body_cat = str_replace("{cat_pic$x}", '', $body_cat);
-                    $body_cat = str_replace("{sum_files_cat$x}", '', $body_cat); 
-                    $body_cat = str_replace("{sum_subcats$x}", '', $body_cat);
-                    $body_cat = str_replace("{cat_description$x}", '', $body_cat);  
-                } 
-            } else {
-                // display not a category info 
-                $body_cat = str_replace('{cat_title}', '', $body_cat);
-            }    
+
+        }  else {
+            
+            // display not a category info 
+            $body_cat = str_replace('{cat_title}', '', $body_cat);
+            $body_cat = str_replace('{tags}', '', $body_cat);
             
             // remove all title html tags in top cat output
             if ($pos_end = strpos($body_cat, '{cat_title_end}')){
@@ -447,6 +445,7 @@
         }        
 
         $i             = 0;
+        $w             = 0;
         $paging        = '';
         $subcat_itemid = '';
                 
@@ -479,14 +478,26 @@
                          $catpic = '<a href="'.$catlink.'"><img src="'.JURI::base().'images/jdownloads/catimages/'.$this->children[$parentCatid][$i]->pic.'" style="text-align:top;border:0px;" width="'.$jlistConfig['cat.pic.size'].'" height="'.$jlistConfig['cat.pic.size.height'].'" alt="'.$this->children[$parentCatid][$i]->pic.'" /></a> ';
                      } else {
                          $catpic = '';
-                     }                         
+                     }
+                     
+                     if ($this->params->get('show_cat_tags', 1) && !empty($this->children[$parentCatid][$i]->tags->itemTags)){
+                         $this->children[$parentCatid][$i]->tagLayout = new JLayoutFile('joomla.content.tags'); 
+                         $body_subcats = str_replace('{tags}', $this->children[$parentCatid][$i]->tagLayout->render($this->children[$parentCatid][$i]->tags->itemTags), $body_subcats);
+                            
+                     } else {
+                         $body_subcats = str_replace('{tags}', '', $body_subcats);
+                     }                                              
 
                      // more as one column   ********************************************************
                      if ($cats_layout->cols > 1 && strpos($cats_layout_text, '{cat_title1}')){
                         $a = 0;     
-
+                        
                         for ($a=0; $a < $cats_layout->cols; $a++){
 
+                            if ($a >= $total_subcategories || $i == $total_subcategories || $w == $total_subcategories){
+                                continue;
+                            }
+    
                             // exists a single category menu link for this subcat? 
                             if ($this->children[$parentCatid][$i]->menu_itemid){
                                 $subcat_itemid =  (int)$this->children[$parentCatid][$i]->menu_itemid;
@@ -531,7 +542,8 @@
                                 $body_subcats = str_replace("{cat_pic$x}", '', $body_subcats);
                                 $body_subcats = str_replace("{cat_description$x}", '', $body_subcats);
                              }
-                             if (($a + 1) < $cats_layout->cols){
+                             $w = $i+1;
+                             if (($a + 1) < $cats_layout->cols && isset($this->children[$parentCatid][($w)])){
                                 $i++;
 
                                 // exists a single category menu link for this subcat? 
@@ -740,6 +752,13 @@
             // get the activated/selected "files" layout text to build the output for every download
             $html_file = str_replace('{file_id}',$files[$i]->file_id, $event.$layout_files_text);
             
+            if ($this->params->get('show_tags', 1) && !empty($files[$i]->tags->itemTags)){
+                $files[$i]->tagLayout = new JLayoutFile('joomla.content.tags'); 
+                $html_file = str_replace('{tags}', $files[$i]->tagLayout->render($files[$i]->tags->itemTags), $html_file);   
+            } else {
+                $html_file = str_replace('{tags}', '', $html_file);
+            }            
+            
             // files title row info only view when it is the first file
             if ($i > 0){
                 // remove all html tags in top cat output
@@ -810,7 +829,7 @@
             }
 
             // display the thumbnails
-            $html_file = JDHelper::placeThumbs($html_file, $files[$i]->images);                                                    
+            $html_file = JDHelper::placeThumbs($html_file, $files[$i]->images, 'list');                                                    
 
             // support for content plugins in description / here in the files list layout is only used the short description
             if ($jlistConfig['activate.general.plugin.support'] && $jlistConfig['use.general.plugin.support.only.for.descriptions']) {  
@@ -1415,8 +1434,8 @@
                 }    
             }
             
-            $html_file = str_replace('{downloads}',$pic_downloads.JDHelper::strToNumber($files[$i]->downloads), $html_file);
-            $html_file = str_replace('{hits_value}',$pic_downloads.JDHelper::strToNumber($files[$i]->downloads), $html_file);
+            $html_file = str_replace('{downloads}',$pic_downloads.JDHelper::strToNumber((int)$files[$i]->downloads), $html_file);
+            $html_file = str_replace('{hits_value}',$pic_downloads.JDHelper::strToNumber((int)$files[$i]->downloads), $html_file);
             $html_file = str_replace('{ordering}',$files[$i]->ordering, $html_file);
             $html_file = str_replace('{published}',$files[$i]->published, $html_file);
             
@@ -1522,7 +1541,7 @@
 
     // components footer text
     if ($jlistConfig['downloads.footer.text'] != '') {
-        $footer_text = stripslashes($jlistConfig['downloads.footer.text']);
+        $footer_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.footer.text']));
         if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
             $footer_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $footer_text);
         } else {

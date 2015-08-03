@@ -16,13 +16,17 @@ class jdownloadsViewSearch extends JViewLegacy
 {
 	function display($tpl = null)
 	{
-		require_once JPATH_COMPONENT.'/helpers/search.php';
-
+		global $jlistConfig;
+        
+        require_once JPATH_COMPONENT.'/helpers/search.php';
+        
 		// Initialise some variables
 		$app	= JFactory::getApplication();
         $user   = JFactory::getUser();
         $pathway = $app->getPathway();
 		$uri	= JFactory::getURI();
+        
+        $jd_user_settings = JDHelper::getUserRules();
 
 		$error	= null;
 		$rows	= null;
@@ -92,23 +96,25 @@ class jdownloadsViewSearch extends JViewLegacy
 			$this->document->setMetadata('robots', $params->get('robots'));
 		}
         
+        // upload icon handling
         $this->view_upload_button = false;
         
-        if (!$user->guest){
+        if ($jd_user_settings->uploads_view_upload_icon){
             // we must here check whether the user has the permissions to create new downloads 
             // this can be defined in the components permissions but also in any category
-            
+            // but the upload icon is only viewed when in the user groups settings is also activated the: 'display add/upload icon' option
+                            
             // 1. check the component permissions
             if (!$user->authorise('core.create', 'com_jdownloads')){
                 // 2. not global permissions so we must check now every category (for a lot of categories can this be very slow)
                 $this->authorised_cats = JDHelper::getAuthorisedJDCategories('core.create', $user);
-                if (count($this->authorised_cats > 0)){
+                if (count($this->authorised_cats) > 0){
                     $this->view_upload_button = true;
                 }
             } else {
                 $this->view_upload_button = true;
-            }
-        } 
+            }        
+        }
         
 		// built select lists
 		$orders = array();

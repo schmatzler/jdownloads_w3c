@@ -97,7 +97,7 @@
         
         // components description
         if ($jlistConfig['downloads.titletext'] != '') {
-            $header_text = stripslashes($jlistConfig['downloads.titletext']);
+            $header_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.titletext']));
             if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
                 $header_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $header_text);
             } else {
@@ -119,7 +119,8 @@
 
         $header = str_replace('{home_link}', $home_link, $header);
         $header = str_replace('{search_link}', $search_link, $header);
-        if ($jlistConfig['frontend.upload.active']) {
+        
+        if ($jd_user_settings->uploads_view_upload_icon){
             if ($this->view_upload_button){
                 $header = str_replace('{upload_link}', $upload_link, $header);
             } else {
@@ -369,6 +370,15 @@
                  } else {
                     $html_cat = str_replace('{cat_description}', '', $html_cat); 
                  }    
+                 
+                 // tags creation
+                 if ($this->params->get('show_cat_tags', 1) && !empty($cats[$i]->tags->itemTags)){
+                    $cats[$i]->tagLayout = new JLayoutFile('joomla.content.tags'); 
+                    $html_cat = str_replace('{tags}', $cats[$i]->tagLayout->render($cats[$i]->tags->itemTags), $html_cat);   
+                 } else {
+                    $html_cat = str_replace('{tags}', '', $html_cat);
+                 }                 
+                 
                  $html_cat = str_replace('{cat_pic}', $catpic, $html_cat);
                  $html_cat = str_replace('{cat_info_begin}', '', $html_cat); 
                  $html_cat = str_replace('{cat_info_end}', '', $html_cat);
@@ -440,7 +450,7 @@
 
     // components footer text
     if ($jlistConfig['downloads.footer.text'] != '') {
-        $footer_text = stripslashes($jlistConfig['downloads.footer.text']);
+        $footer_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.footer.text']));
         if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
             $footer_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $footer_text);
         } else {

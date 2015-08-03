@@ -230,7 +230,7 @@ $images_folder = JURI::root().'administrator/components/com_jdownloads/assets/im
                 <td align="center"><?php echo JHtml::_('date',$item->date_added, JText::_('DATE_FORMAT_LC4')); ?>
                 </td>
                 
-                <td align="center"><?php echo JDownloadsHelper::strToNumber($item->downloads);?>
+                <td align="center"><?php echo JDownloadsHelper::strToNumber((int)$item->downloads);?>
                 </td> 
                 
                 <td class="center">

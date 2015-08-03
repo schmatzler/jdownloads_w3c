@@ -2,12 +2,12 @@
 <extension version="3.1" type="plugin" group="search" method="upgrade">
         <name>plg_search_jdownloads</name>
         <author>Arno Betz</author>
-        <creationDate>2014-03-28</creationDate>
+        <creationDate>2015-04-29</creationDate>
         <copyright>Copyright (C) 2014 Arno Betz</copyright>
         <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
         <authorEmail>info@jdownloads.com</authorEmail>
         <authorUrl>www.jdownloads.com</authorUrl>
-        <version>3.2</version>
+        <version>3.2.32</version>
         <description>PLG_SEARCH_JDOWNLOADS_XML_DESCRIPTION</description>
         <files>
                 <filename plugin="jdownloads">jdownloads.php</filename>

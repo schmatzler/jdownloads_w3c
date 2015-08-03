@@ -262,6 +262,15 @@
          
          <!-- Fields for upload/creation form --> 
          
+         <field name="uploads_view_upload_icon"
+                type="checkbox"
+                label="COM_JDOWNLOADS_USERGROUPS_VIEW_UPLOAD_ICON"
+                description="COM_JDOWNLOADS_USERGROUPS_VIEW_UPLOAD_ICON_DESC"
+                class="inputbox"
+                value="1"
+                default="1"
+         />
+
          <field name="uploads_can_change_category"
                 type="checkbox"
                 label="COM_JDOWNLOADS_USERGROUPS_CAN_CHANGE_FILES_CAT"
@@ -269,8 +278,27 @@
                 class="inputbox"
                 value="1"
                 default="0"
+         /> 
+         
+         <field name="uploads_allow_custom_tags"
+                type="checkbox"
+                label="COM_JDOWNLOADS_USERGROUPS_ALLOW_CUSTOM_TAGS"
+                description="COM_JDOWNLOADS_USERGROUPS_ALLOW_CUSTOM_TAGS_DESC"
+                class="inputbox"
+                value="1"
+                default="1"
          />      
-          
+
+         <field name="uploads_default_access_level"
+                type="accesslevel"
+                label="COM_JDOWNLOADS_USERGROUPS_DEFAULT_ACCESS_LEVEL"
+                description="COM_JDOWNLOADS_USERGROUPS_DEFAULT_ACCESS_LEVEL_DESC"
+                class="inputbox"
+                size="1"
+                default="0">
+                <option value="0">COM_JDOWNLOADS_SELECT_ACCESS</option>  
+         </field>
+         
          <field name="uploads_auto_publish"
                 type="checkbox" 
                 class="inputbox"
@@ -887,6 +915,15 @@
                 value="1"
                 default="0"
          />
+         
+         <field name="form_tags"
+                type="checkbox" 
+                class="inputbox"
+                label="COM_JDOWNLOADS_TAGS_LABEL" 
+                description=""
+                value="1"
+                default="0"
+         />         
 
          <field name="form_extra_select_box_1"
                 type="checkbox" 

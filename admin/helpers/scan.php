@@ -382,7 +382,7 @@ function checkFiles($task) {
                    
                    $new_cats_create++;
                    // copy index.html to the new folder
-                   $index_copied = JFile::copy($jlistConfig['files.uploaddir'].DS.'index.html', $jlistConfig['files.uploaddir'].DS.$searchdirs[$i].DS.'index.html');
+                   $index_copied = JFile::copy(JPATH_ROOT.DS.'administrator'.DS.'components'.DS.'com_jdownloads'.DS.'index.html', $jlistConfig['files.uploaddir'].DS.$searchdirs[$i].DS.'index.html');
                    $log_array[] = JText::_('COM_JDOWNLOADS_AUTO_CAT_CHECK_ADDED').' <b>'.$searchdirs[$i].'</b><br />';
                }
 
@@ -559,8 +559,9 @@ function checkFiles($task) {
                              }    
                                  
                              $date = JFactory::getDate();
-                             $date->setTimezone(JFactory::getApplication()->getCfg('offset'));
-
+                             $tz = JFactory::getConfig()->get( 'offset' );
+                             $date->setTimezone(new DateTimeZone($tz));
+                             
                              $file_extension = JFile::getExt($filename);
                             
                              // set file size

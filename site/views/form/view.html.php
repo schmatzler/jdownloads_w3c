@@ -177,6 +177,12 @@ class jdownloadsViewForm extends JViewLegacy
         if ($user_rules->form_extra_large_input_1 && $user_rules->form_extra_large_input_1_x)   $this->form->setFieldAttribute( 'custom_field_13', 'required', 'true' );         
         if ($user_rules->form_extra_large_input_2 && $user_rules->form_extra_large_input_2_x)   $this->form->setFieldAttribute( 'custom_field_14', 'required', 'true' );         
         
+        // check the possibility to create new custom tags
+        if (!$user_rules->uploads_allow_custom_tags){
+            $this->form->setFieldAttribute( 'tags', 'custom', 'deny' );
+            //$this->form->setFieldAttribute( 'tags', 'mode', 'nested' );
+        }
+        
         if (!$this->item->file_id){
             // new Download
             // set default value for access in form when exist - use otherwise 1 for public access
@@ -243,6 +249,13 @@ class jdownloadsViewForm extends JViewLegacy
         
         $this->user_rules  = $user_rules;
         $this->user_limits = $user_limits;
+        
+        $this->item->tags = new JHelperTags;
+
+        if (!empty($this->item->file_id))
+        {
+            $this->item->tags->getItemTags('com_jdownloads.download.', $this->item->file_id);
+        }        
         
 		if (!empty($this->item) && isset($this->item->file_id)) {
 			$tmp = new stdClass;

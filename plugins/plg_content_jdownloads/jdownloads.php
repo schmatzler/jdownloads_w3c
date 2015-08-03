@@ -834,7 +834,7 @@ class plgContentJdownloads extends JPlugin
         
         $jd_cat_id      = $files->cat_id;
         $jd_filename    = $files->url_download;                                                                              
-        $jd_language    = $files->language;
+        $jd_file_language  = $files->file_language;
         $jd_system      = $files->system;
         
         if ($files->category_cat_dir_parent){
@@ -936,11 +936,12 @@ class plgContentJdownloads extends JPlugin
         $l_Template = str_replace('{license}', $lic_data, $l_Template); // old placeholder
 
         // Build the 'files language' data
-        $file_lang_values = explode(',' , $jlistConfigM['language.list']);
-        if ($jd_language == 0 ) {
+        $file_lang_values = explode(',' , JDHelper::getOnlyLanguageSubstring($jlistConfigM['language.list']));
+
+        if ($jd_file_language == 0 ) {
             $jd_showlanguage = '';
         } else {
-            $jd_showlanguage = $jdpic_language.$file_lang_values[$jd_language];
+            $jd_showlanguage = $jdpic_language.$file_lang_values[$jd_file_language];
         }
         $l_Template = str_replace("{language}",$jd_showlanguage,$l_Template); // old placeholder
         $l_Template = str_replace("{language_text}",$jd_showlanguage,$l_Template);
@@ -956,7 +957,7 @@ class plgContentJdownloads extends JPlugin
         $l_Template = str_replace("{system_text}",$jd_showsystem,$l_Template);
       
         // Build hits values
-        $numbers_downloads = JDHelper::strToNumber($files->downloads);
+        $numbers_downloads = JDHelper::strToNumber((int)$files->downloads);
         $jd_showhits = $jdpic_hits.$numbers_downloads;
         $l_Template = str_replace("{hits_value}",$jd_showhits,$l_Template);
 
@@ -1011,7 +1012,7 @@ class plgContentJdownloads extends JPlugin
         }
                      
         // Place the images
-        $l_Template = JDHelper::placeThumbs($l_Template, $files->images);      
+        $l_Template = JDHelper::placeThumbs($l_Template, $files->images, 'list');      
         
         // Compute for HOT symbol
         if ($jlistConfigM['loads.is.file.hot'] > 0 && $files->downloads >= $jlistConfigM['loads.is.file.hot'] ){

@@ -21,7 +21,10 @@ defined('_JEXEC') or die('Restricted access');
     $document   = JFactory::getDocument();
     $jinput     = JFactory::getApplication()->input;
     $app        = JFactory::getApplication();    
-    $user       = JFactory::getUser(); 
+    $user       = JFactory::getUser();
+    
+    // get jD user limits and settings
+    $jd_user_settings = JDHelper::getUserRules();     
     
     $password_used  = false;
     $password_valid = false;
@@ -248,7 +251,7 @@ defined('_JEXEC') or die('Restricted access');
         
         // components description
         if ($jlistConfig['downloads.titletext'] != '') {
-            $header_text = stripslashes($jlistConfig['downloads.titletext']);
+            $header_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.titletext']));
             if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
                 $header_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $header_text);
             } else {
@@ -270,8 +273,13 @@ defined('_JEXEC') or die('Restricted access');
 
         $header = str_replace('{home_link}', $home_link, $header);
         $header = str_replace('{search_link}', $search_link, $header);
-        if ($jlistConfig['frontend.upload.active']) {
-            $header = str_replace('{upload_link}', $upload_link, $header);
+
+        if ($jd_user_settings->uploads_view_upload_icon){
+            if ($this->view_upload_button){
+                $header = str_replace('{upload_link}', $upload_link, $header);
+            } else {
+                $header = str_replace('{upload_link}', '', $header);
+            }            
         } else {
             $header = str_replace('{upload_link}', '', $header);
         }    
@@ -637,7 +645,11 @@ defined('_JEXEC') or die('Restricted access');
                         }    
                         $agree_form = '<form action="'.$download_link.'" method="post" name="jd_agreeForm" id="jd_agreeForm" >';
                         $agree_form .= '<input type="checkbox" name="license_agree" onclick="enableDownloadButton(this)" /> '.JText::_('COM_JDOWNLOADS_FRONTEND_VIEW_AGREE_TEXT').'<br /><br />';
-                        $agree_form .= '<input type="submit" name="submit" id="jd_license_submit" class="button" value="'.JText::_('COM_JDOWNLOADS_LINKTEXT_DOWNLOAD_URL').'" disabled="disabled" />';
+                        if ($jlistConfig['use.css.buttons.instead.icons'] == '0'){
+                            $agree_form .= '<input type="submit" name="submit" id="jd_license_submit" class="button" value="'.JText::_('COM_JDOWNLOADS_LINKTEXT_DOWNLOAD_URL').'" disabled="disabled" />';
+                        } else {
+                            $agree_form .= '<input type="submit" name="submit" id="jd_license_submit" class="jdbutton '.$download_color.' '.$download_size.'" value="'.JText::_('COM_JDOWNLOADS_LINKTEXT_DOWNLOAD_URL').'" disabled="disabled" />';
+                        }                        
                         $agree_form .= JHtml::_( 'form.token' )."</form>";
                     } else {
                         $html_sum = str_replace('{license_text}', '', $html_sum);
@@ -718,7 +730,7 @@ defined('_JEXEC') or die('Restricted access');
 
     // components footer text
     if ($jlistConfig['downloads.footer.text'] != '') {
-        $footer_text = stripslashes($jlistConfig['downloads.footer.text']);
+        $footer_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.footer.text']));
         if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
             $footer_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $footer_text);
         } else {

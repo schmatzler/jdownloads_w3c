@@ -34,6 +34,8 @@ class jdownloadsViewSummary extends JViewLegacy
 		$user		= JFactory::getUser();
 		$userId		= $user->get('id');
         
+        $jd_user_settings = JDHelper::getUserRules();        
+        
         // get jD User group settings and limitations
         $this->user_rules = JDHelper::getUserRules();
 
@@ -44,24 +46,26 @@ class jdownloadsViewSummary extends JViewLegacy
         
 		$this->user		= $user;
 
+        // upload icon handling
         $this->view_upload_button = false;
         
-        if (!$user->guest){
+        if ($jd_user_settings->uploads_view_upload_icon){
             // we must here check whether the user has the permissions to create new downloads 
             // this can be defined in the components permissions but also in any category
-            
+            // but the upload icon is only viewed when in the user groups settings is also activated the: 'display add/upload icon' option
+                            
             // 1. check the component permissions
             if (!$user->authorise('core.create', 'com_jdownloads')){
                 // 2. not global permissions so we must check now every category (for a lot of categories can this be very slow)
                 $this->authorised_cats = JDHelper::getAuthorisedJDCategories('core.create', $user);
-                if (count($this->authorised_cats > 0)){
+                if (count($this->authorised_cats) > 0){
                     $this->view_upload_button = true;
                 }
             } else {
                 $this->view_upload_button = true;
-            }
-        } 
-                
+            }        
+        }
+                                     
         // Check for errors.
 		if (count($errors = $this->get('Errors'))) {
 			JError::raiseWarning(500, implode("\n", $errors));

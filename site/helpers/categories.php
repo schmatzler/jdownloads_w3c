@@ -213,9 +213,12 @@ class JDCategories
         // Record that has this $id has been checked
 		$this->_checkedCategories[$id] = true;
 
-		$query = $db->getQuery(true);
+        $db->setQuery('SET SESSION SQL_BIG_SELECTS = 1');
+        $db->execute();
 
-		// Right join with c for category
+        $query = $db->getQuery(true);
+        
+        // Right join with c for category
 		$query->select('c.*');
 		$case_when = ' CASE WHEN ';
 		$case_when .= $query->charLength('c.alias');
@@ -227,6 +230,18 @@ class JDCategories
 		$query->select($case_when);
 
 		$query->from('#__jdownloads_categories as c');
+        
+        if (isset($this->_options['category_id'])){
+            if ($this->_options['category_id']){
+                $query->where($this->_options['category_id']);
+            }
+        }
+        
+        if (isset($this->_options['level'])){
+            if ($this->_options['level']){
+                $query->where('c.level <= '. $db->Quote($this->_options['level']));
+            }
+        }        
 
 		if ($this->_options['access'])
 		{
@@ -300,7 +315,7 @@ class JDCategories
                                                                                              
         // Join on menu table. We need the single category menu itemid when exist                                                                                                  
         $query->select('menu.id AS menu_itemid');
-        $query->join('LEFT', '#__menu AS menu on menu.link LIKE CONCAT(\'index.php?option=com_jdownloads&view=category&catid=\',c.id,\'%\') AND menu.published = 1 AND menu.access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')') ;
+        $query->join('LEFT', '#__menu AS menu on menu.link LIKE CONCAT(\'index.php?option=com_jdownloads&view=category&catid=\',c.id) AND menu.published = 1 AND menu.access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')') ;
 
 		// Group by
 		$query->group('c.id, c.cat_dir, c.cat_dir_parent, c.parent_id, c.lft, c.rgt, c.level, c.title, c.alias, c.description, c.pic, c.access, c.metakey, c.metadesc, c.robots,
@@ -328,14 +343,20 @@ class JDCategories
                             $query = $db->getQuery(true);
                             $query->select('cat.id');
                             $query->from('#__jdownloads_categories as cat');
-                            if ($this->_options['published'] == 1)
-                            {
+                            if ($this->_options['published'] == 1){
                                 $query->where('cat.lft BETWEEN '.$result->lft.' AND '.$result->rgt.' AND cat.published = 1 AND cat.access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')');
-                            }
-                            else                     
-                            {
+                            } else {
                                 $query->where('cat.lft BETWEEN '.$result->lft.' AND '.$result->rgt.' AND cat.access IN (' . implode(',', $user->getAuthorisedViewLevels()) . ')');
                             }    
+
+                            // use the category filter to get only the needed results
+                            if (isset($this->_options['category_id'])){
+                                if ($this->_options['category_id']){
+                                    $cat_filter = str_replace('c.id', 'cat.id', $this->_options['category_id']);
+                                    $query->where($cat_filter);
+                                }
+                            }    
+
                             $query->order('cat.id');
                             $db->setQuery($query);
                             $children_ids = $db->loadColumn();
@@ -356,7 +377,7 @@ class JDCategories
                                 $db->setQuery($query);
                                 $count = $db->loadResult();
                             }               
-                            $result->numitems = $count;
+                            $result->numitems = (int)$count;
                     }
                 }
                 

@@ -39,7 +39,7 @@
     $listDirn  = $this->escape($this->state->get('list.direction'));    
     
     // Create shortcuts to some parameters.
-    //$params     = $this->category->params;
+    $params     = $this->params;
     $files      = $this->items;
 
     $html           = '';
@@ -121,8 +121,8 @@
         }        
         
         // components description
-        if ($jlistConfig['downloads.titletext'] != '') {
-            $header_text = stripslashes($jlistConfig['downloads.titletext']);
+        if ($jlistConfig['downloads.titletext'] != ''){
+            $header_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.titletext']));
             if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
                 $header_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $header_text);
             } else {
@@ -144,7 +144,8 @@
 
         $header = str_replace('{home_link}', $home_link, $header);
         $header = str_replace('{search_link}', $search_link, $header);
-        if ($jlistConfig['frontend.upload.active']) {
+        
+        if ($jd_user_settings->uploads_view_upload_icon){
             if ($this->view_upload_button){
                 $header = str_replace('{upload_link}', $upload_link, $header);
             } else {
@@ -362,7 +363,7 @@
             
             $has_no_file = false;
             $file_id = $files[$i]->file_id;
-
+            
             // when we have not a menu item to the singel download, we need a menu item from the assigned category, or at lates the root itemid
             if ($files[$i]->menuf_itemid){
                 $file_itemid =  (int)$files[$i]->menuf_itemid;
@@ -386,6 +387,14 @@
             if (!strpos($html_file, '{url_download}')){
                 // try to use the checkbox placeholder
                 $html_file = str_replace('{checkbox_list}', '{url_download}', $html_file);
+            }
+            
+            // render the tags
+            if ($params->get('show_tags', 1) && !empty($files[$i]->tags->itemTags)){ 
+                $files[$i]->tagLayout = new JLayoutFile('joomla.content.tags');
+                $html_file = str_replace('{tags}', $files[$i]->tagLayout->render($files[$i]->tags->itemTags), $html_file);
+            } else {
+                $html_file = str_replace('{tags}', '', $html_file);
             }
             
             // files title row info only view when it is the first file
@@ -458,7 +467,7 @@
             }
 
             // display the thumbnails
-            $html_file = JDHelper::placeThumbs($html_file, $files[$i]->images);                                                    
+            $html_file = JDHelper::placeThumbs($html_file, $files[$i]->images, 'list');                                                    
 
             // support for content plugins in description / here in the files list layout is only used the short description
             if ($jlistConfig['activate.general.plugin.support'] && $jlistConfig['use.general.plugin.support.only.for.descriptions']) {  
@@ -1058,8 +1067,8 @@
                 }    
             }
             
-            $html_file = str_replace('{downloads}',$pic_downloads.JDHelper::strToNumber($files[$i]->downloads), $html_file);
-            $html_file = str_replace('{hits_value}',$pic_downloads.JDHelper::strToNumber($files[$i]->downloads), $html_file);            
+            $html_file = str_replace('{downloads}',$pic_downloads.JDHelper::strToNumber((int)$files[$i]->downloads), $html_file);
+            $html_file = str_replace('{hits_value}',$pic_downloads.JDHelper::strToNumber((int)$files[$i]->downloads), $html_file);            
             $html_file = str_replace('{ordering}',$files[$i]->ordering, $html_file);
             $html_file = str_replace('{published}',$files[$i]->published, $html_file);
             
@@ -1133,7 +1142,7 @@
 
     // components footer text
     if ($jlistConfig['downloads.footer.text'] != '') {
-        $footer_text = stripslashes($jlistConfig['downloads.footer.text']);
+        $footer_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.footer.text']));
         if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
             $footer_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $footer_text);
         } else {

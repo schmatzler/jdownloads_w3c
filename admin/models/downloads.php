@@ -75,7 +75,6 @@ class jdownloadsModeldownloads extends JModelList
                 'password', 'a.password',
                 'password_md5', 'a.password_md5',
                 'views', 'a.views',
-                'tags', 'a.tags',
                 'metakey', 'a.metakey',
                 'metadesc', 'a.metadesc',
                 'robots', 'a.robots',

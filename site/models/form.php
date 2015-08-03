@@ -121,6 +121,12 @@ class jdownloadsModelForm extends jdownloadsModeldownload
                 $value->params->set('access-change', $user->authorise('core.edit.state', 'com_jdownloads'));
 			}
 		}
+        
+        if ($itemId){
+            $value->tags = new JHelperTags;
+            $value->tags->getTagIds($value->file_id, 'com_jdownloads.download');
+            //$value->metadata['tags'] = $value->tags;
+        }        
 
 		return $value;
 	}

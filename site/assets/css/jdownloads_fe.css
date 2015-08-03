@@ -6,15 +6,16 @@
 *   jdownloads-fe  jD32 V4I  2015-02-05 
 */
 
-tr, td {
+.jd-item-page tr,
+.jd-item-page td {
     border: 0px !important;
 }
 
-table {
+.jd-item-page table {
 	border-collapse: separate !important;
 }
 
-jd_div {
+.jd_div {
         margin:0;
 }
 
@@ -638,6 +639,7 @@ background-image:url('') !important;
        float:left;
        }
 .formelm60 label,
+.formelm_tags label,
 .formelm label {
        width: 11em;
        float: left;
@@ -647,6 +649,7 @@ background-image:url('') !important;
        margin-left: 5px;
        float:left;
        }
+.formelm_tags,
 .formelm {
        clear: both;
        }
@@ -662,6 +665,15 @@ background-image:url('') !important;
 }
 .formelm select, .formelm-area select {
       width: auto;
+}
+/*  width overrides in tags field in upload form */
+.formelm_tags #jform_tags_chzn ul, 
+.formelm_tags #jform_tags_chzn input[style],
+.formelm_tags div[style] {
+    width: 219px !important;
+}
+.formelm_tags {
+  padding-bottom: 9px;
 }      
 /* required to fix the search form in beez */
 fieldset.only label:before {

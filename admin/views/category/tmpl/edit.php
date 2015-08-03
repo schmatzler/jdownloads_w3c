@@ -17,7 +17,8 @@ global $jlistConfig;
 
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHTML::_('behavior.formvalidation');
+// JHtml::_('behavior.formvalidator'); Joomla >= 3.4
 JHtml::_('behavior.keepalive');
 
 jimport( 'joomla.form.form' );
@@ -107,11 +108,13 @@ jimport( 'joomla.form.form' );
                         </div></div>
                     </li>
                 <?php endif; ?>                
-                
 
                 <!--<li><?php // echo $this->form->getLabel('ordering'); ?>
                 <?php // echo $this->form->getInput('ordering'); ?></li>
                 -->
+
+                <li><?php echo $this->form->getLabel('tags'); ?>
+                <?php echo $this->form->getInput('tags'); ?></li> 
                 
                 <li><?php echo $this->form->getLabel('language'); ?>
                 <?php echo $this->form->getInput('language'); ?></li>

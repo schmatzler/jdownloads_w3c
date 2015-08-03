@@ -999,9 +999,12 @@ class JDownloadsHelper
         imagesavealpha($newpic,true);
         
         /* resize it */
-        imagecopyresized($newpic,$oldpic,0,0,0,0,$newwidth,$newheight,$width,$height); 
+        // imagecopyresized will copy and scale and image. This uses a fairly primitive algorithm that tends to yield more pixelated results.
+        //imagecopyresized($newpic,$oldpic,0,0,0,0,$newwidth,$newheight,$width,$height);
+        // imagecopyresampled will copy and scale and image, it uses a smoothing and pixel interpolating algorithm that will generally yield much better results then imagecopyresized at the cost of a little cpu usage.
+        imagecopyresampled($newpic,$oldpic,0,0,0,0,$newwidth,$newheight,$width,$height);  
         // store the image
-        switch($size[2]) {
+        switch($size[2]){
             case "1":    return imagegif($newpic, $thumbfilename);
             break;
             case "2":    return imagejpeg($newpic, $thumbfilename);
@@ -2234,7 +2237,7 @@ class JDownloadsHelper
                        
                        $new_cats_create++;
                        // copy index.html to the new folder
-                       $index_copied = JFile::copy($jlistConfig['files.uploaddir'].DS.'index.html', $jlistConfig['files.uploaddir'].DS.$searchdirs[$i].DS.'index.html');
+                       $index_copied = JFile::copy(JPATH_ROOT.DS.'administrator'.DS.'components'.DS.'com_jdownloads'.DS.'index.html', $jlistConfig['files.uploaddir'].DS.$searchdirs[$i].DS.'index.html');
                        $log_array[] = JText::_('COM_JDOWNLOADS_AUTO_CAT_CHECK_ADDED').' <b>'.$searchdirs[$i].'</b><br />';
                    }
 
@@ -2351,8 +2354,8 @@ class JDownloadsHelper
                                 $filename_new = self::getCleanFolderFileName( $only_name, true).'.'.$file_extension;                                
                                                          
                                 if ($only_name == ''){
-                                    echo "<script> alert('Error: Filename empty after cleaning!'); </script>\n";
-                                    exit();
+                                    $msgfile = $startdir.$only_dirs.'/'.$filename;
+                                    $log_array[] = "Error. Filename empty after cleaning! Location is: ".$only_dirs.'/'.$filename;
                                 }
                                  
                                 if ($filename_new != $filename){
@@ -2363,8 +2366,7 @@ class JDownloadsHelper
                                         $filename = $filename_new; 
                                     } else {
                                         // could not rename filename
-                                        echo "<script> alert('Error: Could not rename $filename'); </script>\n";
-                                        exit();
+                                        $log_array[] = "Error. Could not rename: $filename to: $filename_new";
                                     }
                                 }     
 
@@ -2384,8 +2386,9 @@ class JDownloadsHelper
                                 }    
                                      
                                 $date = JFactory::getDate();
-                                $date->setTimezone(JFactory::getApplication()->getCfg('offset'));
-
+                                $tz = JFactory::getConfig()->get( 'offset' );
+                                $date->setTimezone(new DateTimeZone($tz));
+                                
                                  $file_extension = JFile::getExt($filename);
                                 
                                  // set file size
@@ -2466,8 +2469,7 @@ class JDownloadsHelper
                                  $create_result = $model_download->createAutoDownload( $data );
                                  if (!$create_result){
                                     // error message
-                                    echo "<script> alert('Error: Could not add download for: $filename'); window.history.go(-1); </script>\n";
-                                    exit();
+                                    $log_array[] = "Error. Could not add download for: $filename";
                                  }
                                 
                                  $new_files++;
@@ -2643,6 +2645,11 @@ class JDownloadsHelper
         // in this case use we as default the en-GB format
         if (!$dec_point || $dec_point == 'DECIMALS_SEPARATOR') $dec_point = '.'; 
         if (!$thousands_sep || $thousands_sep == 'THOUSANDS_SEPARATOR') $thousands_sep = ',';
+        
+        // we will not round a value so we must check it
+        if (is_numeric($str) && !is_int($str) && !is_double($str) && $decimals == 0){
+            $decimals = 2;
+        }         
 
         $number = number_format($str, $decimals, $dec_point, $thousands_sep);
         return $number;

@@ -60,13 +60,14 @@ class JdownloadsModelCategories extends JModelList
         $mergedParams->merge($params);
 
         $this->setState('params', $mergedParams);
-        $user        = JFactory::getUser();
+        $user = JFactory::getUser();
                 
         // Create a new query object.
-        $db        = $this->getDbo();
-        $query    = $db->getQuery(true);
-        $groups    = implode(',', $user->getAuthorisedViewLevels());
-        $menu_params = $this->state->params;
+        $db           = $this->getDbo();
+        $query        = $db->getQuery(true);
+        $groups       = implode(',', $user->getAuthorisedViewLevels());
+        $menu_params  = $this->state->params;
+        $listOrderNew = '';
 
         $this->setState('filter.published', 1);
         $this->setState('filter.access', true);
@@ -145,7 +146,9 @@ class JdownloadsModelCategories extends JModelList
 		$id	.= ':'.$this->getState('filter.published');
 		$id	.= ':'.$this->getState('filter.access');
 		$id	.= ':'.$this->getState('filter.parentId');
-
+        $id .= ':'.$this->getState('filter.category_id');
+        $id .= ':'.$this->getState('filter.level');
+        
 		return parent::getStoreId($id);
 	}
 
@@ -177,6 +180,8 @@ class JdownloadsModelCategories extends JModelList
                 $options['ordering'] = $this->getState('list.ordering');
             }    
 			$options['direction'] = $this->getState('list.direction');
+            $options['category_id'] = $this->getState('filter.category_id');
+            $options['level'] = $this->getState('filter.level', 0);
             
 			$categories = JDCategories::getInstance('jdownloads', $options);
             

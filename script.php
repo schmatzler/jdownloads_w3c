@@ -12,7 +12,7 @@
  */
  
 defined('_JEXEC') or die('Restricted access');
- 
+
 /**
  * Install Script file of jDownloads component
  */
@@ -67,7 +67,7 @@ class com_jdownloadsInstallerScript
 
 		define('JD_BACKEND_PATH' ,  JPATH_ROOT.DS.'administrator'.DS.'components'.DS.'com_jdownloads');
 		define('JD_FRONTEND_PATH',  JPATH_ROOT.DS.'components'.DS.'com_jdownloads');
-
+        
         /*
         / Copy frontend images to the joomla images folder
         */
@@ -146,19 +146,20 @@ class com_jdownloadsInstallerScript
         $installer = new JInstaller;
         $result = $installer->install($src_modules.DS.'mod_jdownloads_last_updated');
         $status->modules[] = array('name'=>'mod_jdownloads_last_updated','client'=>'site', 'result'=>$result);
+
+        $installer = new JInstaller;
+        $result = $installer->install($src_modules.DS.'mod_jdownloads_most_recently_downloaded');
+        $status->modules[] = array('name'=>'mod_jdownloads_most_recently_downloaded','client'=>'site', 'result'=>$result);
         
         $installer = new JInstaller;
         $result = $installer->install($src_modules.DS.'mod_jdownloads_stats');
         $status->modules[] = array('name'=>'mod_jdownloads_stats','client'=>'site', 'result'=>$result);        
-/*
-        $installer = new JInstaller;
-        $result = $installer->install($src_modules.DS.'mod_jdownloads_last_downloaded_files');
-        $status->modules[] = array('name'=>'mod_jdownloads_last_downloaded_files','client'=>'site', 'result'=>$result);
 
         $installer = new JInstaller;
         $result = $installer->install($src_modules.DS.'mod_jdownloads_tree');
         $status->modules[] = array('name'=>'mod_jdownloads_tree','client'=>'site', 'result'=>$result);
 
+/*        
         $installer = new JInstaller;
         $result = $installer->install($src.DS.'mod_jdownloads_rated');
         $status->modules[] = array('name'=>'mod_jdownloads_rated','client'=>'site', 'result'=>$result);
@@ -663,6 +664,8 @@ class com_jdownloadsInstallerScript
             // Check default upload directory 
             $dir_exist = JFolder::exists($jd_upload_root);
             
+            $indexhtml_source = dirname(__FILE__).DS.'index.html'; 
+            
             if ($dir_exist) {
                 if (is_writable($jd_upload_root)) {
                     echo "<font color='green'>--> ".JText::_('COM_JDOWNLOADS_INSTALL_7')."</font><br />";
@@ -672,7 +675,7 @@ class com_jdownloadsInstallerScript
             } else {
                 if ($makedir =  JFolder::create($jd_upload_root, 0755)) {
                     // copy the index.html to the new folder
-                    JFile::copy(JPATH_COMPONENT_ADMINISTRATOR.DS.'index.html', $jd_upload_root.DS.'index.html');
+                    JFile::copy($indexhtml_source, $jd_upload_root.DS.'index.html');
                     echo "<font color='green'>--> ".JText::_('COM_JDOWNLOADS_INSTALL_9')."<br />";
                 } else {
                      echo "<font color='red'><strong>--> ".JText::_('COM_JDOWNLOADS_INSTALL_10')."</strong></font><br />";
@@ -691,7 +694,7 @@ class com_jdownloadsInstallerScript
             } else {
                 if ($makedir =  JFolder::create($jd_upload_root.DS.'_uncategorised_files', 0755)) {
                     // copy the index.html to the new folder
-                    JFile::copy(JPATH_COMPONENT_ADMINISTRATOR.DS.'index.html', $jd_upload_root.DS.'_uncategorised_files'.DS.'index.html');
+                    JFile::copy($indexhtml_source, $jd_upload_root.DS.'_uncategorised_files'.DS.'index.html');
                     echo "<font color='green'>--> ".JText::_('COM_JDOWNLOADS_INSTALL_20')."<br />";
                 } else {
                      echo "<font color='red'><strong>--> ".JText::_('COM_JDOWNLOADS_INSTALL_21')."</strong></font><br />";
@@ -710,7 +713,7 @@ class com_jdownloadsInstallerScript
             } else {
                 if ($makedir =  JFolder::create($jd_upload_root.DS.'_preview_files', 0755)) {
                     // copy the index.html to the new folder
-                    JFile::copy(JPATH_COMPONENT_ADMINISTRATOR.DS.'index.html', $jd_upload_root.DS.'_preview_files'.DS.'index.html');
+                    JFile::copy($indexhtml_source, $jd_upload_root.DS.'_preview_files'.DS.'index.html');
                     echo "<font color='green'>--> ".JText::_('COM_JDOWNLOADS_INSTALL_28')."<br />";
                 } else {
                      echo "<font color='red'><strong>--> ".JText::_('COM_JDOWNLOADS_INSTALL_29')."</strong></font><br />";
@@ -729,7 +732,7 @@ class com_jdownloadsInstallerScript
             } else {
                 if ($makedir =  JFolder::create($jd_upload_root.DS.'_private_user_area', 0755)) {
                     // copy the index.html to the new folder
-                    JFile::copy(JPATH_COMPONENT_ADMINISTRATOR.DS.'index.html', $jd_upload_root.DS.'_private_user_area'.DS.'index.html');
+                    JFile::copy($indexhtml_source, $jd_upload_root.DS.'_private_user_area'.DS.'index.html');
                     echo "<font color='green'>--> ".JText::_('COM_JDOWNLOADS_INSTALL_24')."<br />";
                 } else {
                      echo "<font color='red'><strong>--> ".JText::_('COM_JDOWNLOADS_INSTALL_25')."</strong></font><br />";
@@ -748,7 +751,7 @@ class com_jdownloadsInstallerScript
             } else {
                 if ($makedir = JFolder::create($jd_upload_root.DS.'_tempzipfiles'.DS, 0755)) {
                     // copy the index.html to the new folder
-                    JFile::copy(JPATH_COMPONENT_ADMINISTRATOR.DS.'index.html', $jd_upload_root.DS.'_tempzipfiles'.DS.'index.html');
+                    JFile::copy($indexhtml_source, $jd_upload_root.DS.'_tempzipfiles'.DS.'index.html');
                     echo "<font color='green'>--> ".JText::_('COM_JDOWNLOADS_INSTALL_13')."<br />";
                 } else {
                  echo "<font color='red'><strong>--> ".JText::_('COM_JDOWNLOADS_INSTALL_14')."</strong></font><br />";
@@ -871,6 +874,16 @@ class com_jdownloadsInstallerScript
             $result = $installer->uninstall('module',$id,1);
             $status->modules[] = array('name'=>'jDownloads Last Updated Module','client'=>'site', 'result'=>$result);
         }        
+
+        // Most Recently Downloaded Module
+        $db->setQuery('SELECT `extension_id` FROM #__extensions WHERE `element` = "mod_jdownloads_most_recently_downloaded" AND `type` = "module"');
+        $id = $db->loadResult();
+        if($id)
+        {
+            $installer = new JInstaller;
+            $result = $installer->uninstall('module',$id,1);
+            $status->modules[] = array('name'=>'jDownloads Most Recently Downloaded Module','client'=>'site', 'result'=>$result);
+        }  
         
         // Stats Module
         $db->setQuery('SELECT `extension_id` FROM #__extensions WHERE `element` = "mod_jdownloads_stats" AND `type` = "module"');
@@ -880,6 +893,16 @@ class com_jdownloadsInstallerScript
             $installer = new JInstaller;
             $result = $installer->uninstall('module',$id,1);
             $status->modules[] = array('name'=>'jDownloads Stats Module','client'=>'site', 'result'=>$result);
+        }        
+        
+        // Tree Module
+        $db->setQuery('SELECT `extension_id` FROM #__extensions WHERE `element` = "mod_jdownloads_tree" AND `type` = "module"');
+        $id = $db->loadResult();
+        if($id)
+        {
+            $installer = new JInstaller;
+            $result = $installer->uninstall('module',$id,1);
+            $status->modules[] = array('name'=>'jDownloads Tree Module','client'=>'site', 'result'=>$result);
         }        
         
         // System Plugin
@@ -1013,6 +1036,8 @@ class com_jdownloadsInstallerScript
 
         $prefix = self::getCorrectDBPrefix();
         $tablelist = $db->getTableList();
+        
+        $rows = 0;
        
         // get jD language admin file
         $language = JFactory::getLanguage();
@@ -1071,11 +1096,19 @@ class com_jdownloadsInstallerScript
         $installer = new JInstaller;
         $result = $installer->install($src_modules.DS.'mod_jdownloads_last_updated');
         $status->modules[] = array('name'=>'mod_jdownloads_last_updated','client'=>'site', 'result'=>$result);
-        
+
         $installer = new JInstaller;
+        $result = $installer->install($src_modules.DS.'mod_jdownloads_most_recently_downloaded');
+        $status->modules[] = array('name'=>'mod_jdownloads_most_recently_downloaded','client'=>'site', 'result'=>$result);
+        
+        $installer = new JInstaller;                                                                                     
         $result = $installer->install($src_modules.DS.'mod_jdownloads_stats');
         $status->modules[] = array('name'=>'mod_jdownloads_stats','client'=>'site', 'result'=>$result); 
 
+        $installer = new JInstaller;                                                                                     
+        $result = $installer->install($src_modules.DS.'mod_jdownloads_tree');
+        $status->modules[] = array('name'=>'mod_jdownloads_tree','client'=>'site', 'result'=>$result);         
+        
         $installer = new JInstaller;
         $result = $installer->install($src_plugins.DS.'plg_system_jdownloads');
         $status->plugins[] = array('name'=>'jDownloads System Plugin','group'=>'system', 'result'=>$result);
@@ -1168,6 +1201,14 @@ class com_jdownloadsInstallerScript
             $text .= "   This file is loaded after the standard jdownloads_fe.css.\n";   
             $text .= "   So you can use it to overwrite the standard css classes for your own customising.\n*/";             
             $x = file_put_contents($custom_css_path, $text, FILE_APPEND);
+        }
+        
+        // checking process added in 3.2.32
+        $tablefields = $db->getTableColumns($prefix.'jdownloads_usergroups_limits'); 
+        if ( !isset($tablefields['uploads_default_access_level']) ){
+           // create the missing field
+           $db->SetQuery("ALTER TABLE `#__jdownloads_usergroups_limits` ADD `uploads_default_access_level` INT( 10 ) NOT NULL DEFAULT '0' AFTER `uploads_can_change_category`");
+           $db->execute();
         }        
         
         // $parent is the class calling this method
@@ -1323,6 +1364,7 @@ class com_jdownloadsInstallerScript
                     JError::raiseWarning(null, JText::_('COM_JDOWNLOADS_UPDATE_ERROR_INCORRECT_VERSION').' '.$rel);         
                     return false;
                 }
+                
             } else {
                 $component_header = JText::_('COM_JDOWNLOADS_DESCRIPTION');
                 $typetext =  JText::_('COM_JDOWNLOADS_INSTALL_TYPE_INSTALL');
@@ -1356,7 +1398,7 @@ class com_jdownloadsInstallerScript
 	}
  
 	/**
-	 * method to run after an install/update/uninstall method
+	 * method to run after an install/update/discover_install method
 	 *
 	 * @return void
 	 */
@@ -1382,11 +1424,43 @@ class com_jdownloadsInstallerScript
                   $query->set('rules = '.$db->Quote('{"core.admin":[],"core.manage":[],"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[],"core.edit.own":[],"download":{"1":1},"edit.config":[],"edit.user.limits":[]}'));
                   $query->where('name = '.$db->Quote('com_jdownloads'));
                   $db->setQuery($query);
-                  $res = $db->execute();                  
+                  if (!$db->execute()){
+                      $this->setError($db->getErrorMsg());
+                  }    
+                  
               }            
             
-        }        
-		
+        }
+        
+        // write for the tags feature the jd data in the #__content_types table
+        $db = JFactory::getDBO();
+        $query = $db->getQuery(true);
+        $query->select('*');
+        $query->from('#__content_types');
+        $query->where('type_alias = '.$db->Quote('com_jdownloads.download'));
+        $db->setQuery($query);
+        $type_download = $db->loadResult();              
+        
+        if (!$type_download){              
+            $query = $db->getQuery(true);
+            $query->insert($db->quoteName('#__content_types'))
+                    ->columns(array($db->quoteName('type_title'), $db->quoteName('type_alias'), $db->quoteName('table'), $db->quoteName('field_mappings'), $db->quoteName('router')))
+                    ->values($db->quote('jDownloads Download'). ', ' .$db->quote('com_jdownloads.download'). ',' .$db->quote('{"special":{"dbtable":"#__jdownloads_files","key":"file_id","type":"Download","prefix":"JdownloadsTable","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Download","prefix":"JTable","config":"array()"}}', false).', '.$db->quote('{"common":{"core_content_item_id":"file_id","core_title":"file_title","core_state":"published","core_alias":"file_alias","core_created_time":"null","core_modified_time":"null","core_body":"description", "core_hits":"views","core_publish_up":"null","core_publish_down":"null","core_access":"access", "core_params":"params", "core_featured":"null", "core_metadata":"null", "core_language":"language", "core_images":"null", "core_urls":"null", "core_version":"null", "core_ordering":"null", "core_metakey":"null", "core_metadesc":"null", "core_catid":"cat_id", "core_xreference":"null", "asset_id":"null"}, "special":{"parent_id":"parent_id","lft":"null","rgt":"null","level":"null","path":"null","extension":"null","note":"null"}}', false).', ' .$db->quote('JdownloadsHelperRoute::getDownloadRoute'));
+            $db->setQuery($query);
+            if (!$db->execute()){
+                $this->setError($db->getErrorMsg());
+            }    
+            
+            $query = $db->getQuery(true);
+            $query->insert($db->quoteName('#__content_types'))
+                    ->columns(array($db->quoteName('type_title'), $db->quoteName('type_alias'), $db->quoteName('table'), $db->quoteName('field_mappings'), $db->quoteName('router')))
+                    ->values($db->quote('jDownloads Category'). ', ' .$db->quote('com_jdownloads.category'). ',' .$db->quote('{"special":{"dbtable":"#__jdownloads_categories","key":"id","type":"Category","prefix":"JdownloadsTable","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Category","prefix":"JTable","config":"array()"}}', false).', '.$db->quote('{"common":{"core_content_item_id":"id","core_title":"title","core_state":"published","core_alias":"alias","core_created_time":"created_time","core_modified_time":"modified_time","core_body":"description", "core_hits":"views","core_publish_up":"null","core_publish_down":"null","core_access":"access", "core_params":"params", "core_featured":"null", "core_metadata":"null", "core_language":"language", "core_images":"null", "core_urls":"null", "core_version":"null", "core_ordering":"ordering", "core_metakey":"metakey", "core_metadesc":"metadesc", "core_catid":"null", "core_xreference":"null", "asset_id":"asset_id"}, "special":{"parent_id":"parent_id","lft":"lft","rgt":"rgt","level":"level","path":"null","extension":"null","note":"null"}}', false).', ' .$db->quote('JdownloadsHelperRoute::getCategoryRoute'));
+            $db->setQuery($query);
+            if (!$db->execute()){
+                $this->setError($db->getErrorMsg());
+            }    
+        }                    
+    
         echo '<p align="center"><br /><br /><a href="index.php?option=com_jdownloads"><big><strong>'.JText::_('COM_JDOWNLOADS_INSTALL_16').'</strong></big></a><br /><br /></p>';
 	}
 

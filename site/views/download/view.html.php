@@ -35,6 +35,8 @@ class jdownloadsViewDownload extends JViewLegacy
 		$user		= JFactory::getUser();
 		$userId		= $user->get('id');
         
+        $jd_user_settings = JDHelper::getUserRules();        
+        
         // get jD User group settings and limitations
         $this->user_rules = JDHelper::getUserRules();
 
@@ -43,26 +45,29 @@ class jdownloadsViewDownload extends JViewLegacy
 		$this->item		 = $this->get('Item');
 		$this->state	 = $this->get('State');
 		$this->user		 = $user;
-        $this->ipad_user = false;
         
+        // upload icon handling
         $this->view_upload_button = false;
         
-        if (!$user->guest){
+        if ($jd_user_settings->uploads_view_upload_icon){
             // we must here check whether the user has the permissions to create new downloads 
             // this can be defined in the components permissions but also in any category
-            
+            // but the upload icon is only viewed when in the user groups settings is also activated the: 'display add/upload icon' option
+                
             // 1. check the component permissions
             if (!$user->authorise('core.create', 'com_jdownloads')){
                 // 2. not global permissions so we must check now every category (for a lot of categories can this be very slow)
                 $this->authorised_cats = JDHelper::getAuthorisedJDCategories('core.create', $user);
-                if (count($this->authorised_cats > 0)){
+                if (count($this->authorised_cats) > 0){
                     $this->view_upload_button = true;
                 }
             } else {
                 $this->view_upload_button = true;
-            }
-        } 
-                
+            }        
+        }
+
+        $this->ipad_user = false;
+                                     
         // check whether we have an ipad/iphone user for flowplayer aso...
         if ((bool) strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') || (bool) strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')){        
             $this->ipad_user = true;
@@ -115,7 +120,8 @@ class jdownloadsViewDownload extends JViewLegacy
         $this->jd_image_path = JPATH_ROOT  . '/images/jdownloads';
         
         // Create a shortcut for $item.
-		$item = &$this->item;
+		$item = $this->item;
+        $item->tagLayout = new JLayoutFile('joomla.content.tags');
 
 		// Add router helpers.
 		$item->slug			= $item->file_alias ? ($item->file_id.':'.$item->file_alias) : $item->file_id;
@@ -170,6 +176,9 @@ class jdownloadsViewDownload extends JViewLegacy
             return;
 		}
 
+        $item->tags = new JHelperTags;
+        $item->tags->getItemTags('com_jdownloads.download', $this->item->file_id);
+
         // required for some content plugins
         if ($item->description_long != '')
         {
@@ -179,7 +188,7 @@ class jdownloadsViewDownload extends JViewLegacy
             $item->text = $item->description;
             $long_used = false;
         }
-        $item->id = $item->file_id;        
+        $item->id = $item->file_id;
         
 		// Process the content plugins.
 		JPluginHelper::importPlugin('content');
@@ -300,7 +309,23 @@ class jdownloadsViewDownload extends JViewLegacy
 		{
 			$this->document->setDescription($this->params->get('menu-meta_description'));
 		}
-
+        
+        // use the Downloads description when the metadesc is still empty
+        if (empty($this->item->metadesc)) 
+        {
+            $metadescription = strip_tags($this->item->description); 
+            
+            if (strlen($metadescription) >= 150)
+            { 
+               $metadescshort = substr($metadescription, 0, strpos($metadescription," ",150))." ...";  
+            } 
+            else
+            {
+               $metadescshort = $metadescription;
+            }
+            $this->document->setDescription($metadescshort);
+        }            
+        
 		if ($this->item->metakey)
 		{
 			$this->document->setMetadata('keywords', $this->item->metakey);

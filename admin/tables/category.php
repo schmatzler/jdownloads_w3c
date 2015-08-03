@@ -123,6 +123,8 @@ class jdownloadsTablecategory extends JTable
 	function __construct(&$db) 
 	{
 		parent::__construct('#__jdownloads_categories', 'id', $db);
+        // we need also the 'tags' functionality
+        JTableObserverTags::createObserver($this, array('typeAlias' => 'com_jdownloads.category'));        
 	}
     
     /**
@@ -498,10 +500,10 @@ class jdownloadsTablecategory extends JTable
             }
 
             // Lock the table for writing.
-            if (!$this->_lock()) {
+          /*  if (!$this->_lock()) {
                 // Error message set in lock method.
                 return false;
-            }
+            } */
         }
 
         // Store the row to the database.
@@ -1550,7 +1552,7 @@ class jdownloadsTablecategory extends JTable
           if (!JFolder::exists($cat_dir_path)){
               $result = JFolder::create($cat_dir_path);
               // copy also a empty index.html
-              JFile::copy($root_dir_path.DS.'index.html', $cat_dir_path.DS.'index.html');
+              JFile::copy(JPATH_ROOT.DS.'administrator'.DS.'components'.DS.'com_jdownloads'.DS.'index.html', $cat_dir_path.DS.'index.html');
           } else {
               // new category but the given cat_dir exists always... 
               // TODO: problem, we have stored the new category in DB but can not create the new folder - so we have now two categories with the same folder path?   

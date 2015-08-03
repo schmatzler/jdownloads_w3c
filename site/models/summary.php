@@ -262,7 +262,7 @@ class jdownloadsModelSummary extends JModelItem
 				    }
                     // we check some data fields and store the calculated values
                     $sum_files_volume += JDHelper::convertFileSizeToKB($file->size);
-                    $sum_files_prices += (int) $file->price;
+                    $sum_files_prices += floatval($file->price);
                     if ($file->license && $file->license_agree) $must_confirm_license = true;
                     
                     

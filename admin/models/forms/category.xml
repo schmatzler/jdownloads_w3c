@@ -57,7 +57,7 @@
             label="COM_JDOWNLOADS_ACCESS"
             description="COM_JDOWNLOADS_ACCESS_DESC"
             class="inputbox"/>
-
+            
         <field
             name="accessload"
             type="accesslevel"
@@ -90,6 +90,13 @@
             description="COM_JDOWNLOADS_ACCESS_UPLOAD_DESC"
             class="inputbox"/>
 
+        <field 
+            name="tags"
+            type="tag"
+            label="JTAG"
+            description="JTAG_DESC"
+            class="inputbox"
+            multiple="true"/>              
             
         <field name="description"
             type="editor" 

@@ -454,6 +454,14 @@ class JdownloadsModelCategory extends JModelList
 				$this->_children = false;
 				$this->_parent = false;
 			}
+            
+            if (count($this->_children)){
+                for ($i = 0; $i < count($this->_children); $i++) { 
+                    // Get the tags
+                    $this->_children[$i]->tags = new JHelperTags;
+                    $this->_children[$i]->tags->getItemTags('com_jdownloads.category',  $this->_children[$i]->id);
+                }
+            }
 		}
 
 		return $this->_item;

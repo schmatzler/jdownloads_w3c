@@ -20,7 +20,8 @@
     jimport( 'joomla.html.html.tabs' );
    
     JHtml::_('behavior.tooltip');
-    JHtml::_('behavior.formvalidation');
+    JHTML::_('behavior.formvalidation');
+    // JHtml::_('behavior.formvalidator'); Joomla >= 3.4
     JHtml::_('jquery.framework');
     
     $user    = JFactory::getUser();

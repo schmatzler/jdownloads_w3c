@@ -18,7 +18,8 @@ global $jlistConfig;
 JHtml::_('behavior.keepalive');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.calendar');
-JHtml::_('behavior.formvalidation');
+JHTML::_('behavior.formvalidation');
+// JHtml::_('behavior.formvalidator'); Joomla >= 3.4
 
 jimport( 'joomla.html.html.tabs' );
 
@@ -45,7 +46,7 @@ $limits = $this->get('user_limits');
 		    if (task == 'download.cancel' || document.formvalidator.isValid(document.id('adminForm'))) {
 			    Joomla.submitform(task);
 		    } else {
-			    alert('<?php echo $this->escape(JText::_('COM_JDOWNLOADS_VALIDATION_FORM_FAILED'));?>');
+			    alert('<?php echo $this->escape(htmlspecialchars(JText::_('COM_JDOWNLOADS_VALIDATION_FORM_FAILED'), ENT_QUOTES, 'UTF-8'));?>');
 		    }
 	    }
         
@@ -212,25 +213,32 @@ $limits = $this->get('user_limits');
                         <?php echo $this->form->getLabel('access'); ?>
                         <?php echo $this->form->getInput('access'); ?>
                     </div>
-            <?php endif; ?>
+                <?php endif; ?>
+            <?php endif; ?>                
+            
+            <?php 
+            if ($rules->form_tags):?>                        
+                <div class="formelm_tags">
+                    <?php echo $this->form->getLabel('tags'); ?>
+                    <?php echo $this->form->getInput('tags'); ?>
+                </div>              
+            <?php endif; ?>                            
 
             <?php if ($rules->form_language):?>                        
                 <div class="formelm">
                     <?php echo $this->form->getLabel('language'); ?>
                     <?php echo $this->form->getInput('language'); ?>
                 </div>
-           
             <?php endif; ?>            
-        <?php endif; ?>            
-            
-        <?php if ($this->item->params->get('access-change') || $this->item->params->get('access-create') || $this->item->params->get('access-edit')): ?>
-            <?php if ($rules->form_published):?>
-                <div class="formelm">
-                    <?php echo $this->form->getLabel('published'); ?>
-                    <?php echo $this->form->getInput('published'); ?>
-                </div>
+
+            <?php if ($this->item->params->get('access-change') || $this->item->params->get('access-create') || $this->item->params->get('access-edit')): ?>
+                <?php if ($rules->form_published):?>
+                    <div class="formelm">
+                        <?php echo $this->form->getLabel('published'); ?>
+                        <?php echo $this->form->getInput('published'); ?>
+                    </div>
+                <?php endif; ?>            
             <?php endif; ?>            
-        <?php endif; ?>            
             
             <?php if ($rules->form_creation_date):?>
                 <div class="formelm">
@@ -426,7 +434,7 @@ $limits = $this->get('user_limits');
                    <legend><?php echo JText::_('COM_JDOWNLOADS_FORM_LABEL_TAB_IMAGES'); ?></legend>
                     <?php $image_id = 0; ?>
                     <?php if ($this->item->images){ ?>    
-                        <table class="admintable" style="width:100%;border=0px;" cellpadding="0" cellspacing="10">
+                        <table class="admintable" style="width:100%;border:0px;" cellpadding="0" cellspacing="10">
                         <tr><td><?php if ($this->item->images) echo JText::_('COM_JDOWNLOADS_THUMBNAIL_LIST_INFO'); ?></td></tr>
                         <tr>
                         <td valign="top">
@@ -466,7 +474,7 @@ $limits = $this->get('user_limits');
                              <label>
                              <?php  echo JHtml::_('tooltip', JText::_('COM_JDOWNLOADS_FORM_IMAGE_UPLOAD_DESC'), JText::_('COM_JDOWNLOADS_FORM_IMAGE_UPLOAD_LABEL').' '.JText::sprintf('COM_JDOWNLOADS_LIMIT_IMAGES_MSG', $rules->uploads_max_amount_images), '', JText::_('COM_JDOWNLOADS_FORM_IMAGE_UPLOAD_LABEL').' '.JText::sprintf('COM_JDOWNLOADS_LIMIT_IMAGES_MSG', $rules->uploads_max_amount_images) ); ?>
                              </label>
-                            <table id="files_table" class="admintable" style="border=0px;" cellpadding="0" cellspacing="10">
+                            <table id="files_table" class="admintable" style="border:0px;" cellpadding="0" cellspacing="10">
                             <tr id="new_file_row">
                             <td class=""><input type="file" name="file_upload_thumb[0]" id="file_upload_thumb[0]" size="40" accept="image/gif,image/jpeg,image/jpg,image/png" onchange="add_new_image_file(this)" />
                             </td>

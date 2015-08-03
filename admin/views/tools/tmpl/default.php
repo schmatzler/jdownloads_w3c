@@ -6,7 +6,8 @@ defined('_JEXEC') or die('Restricted access');
 global $jlistConfig; 
 
 JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHTML::_('behavior.formvalidation');
+// JHtml::_('behavior.formvalidator'); Joomla >= 3.4
 jimport( 'joomla.form.form' );
 $canDo = jdownloadsHelper::getActions();
 

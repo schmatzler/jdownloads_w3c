@@ -2,12 +2,12 @@
 <extension type="module" client="site" version="3.1" method="upgrade">
         <name>jDownloads Latest</name>
         <author>Arno Betz</author>
-        <creationDate>2015-02-26</creationDate>
+        <creationDate>2015-06-12</creationDate>
         <copyright>(C) 2007-2015 Arno Betz. All rights reserved.</copyright>
         <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
         <authorEmail>info@jdownloads.com</authorEmail>
         <authorUrl>www.jDownloads.com</authorUrl>
-        <version>3.2.27</version>
+        <version>3.2.34</version>
         <description>MOD_JDOWNLOADS_LATEST_XML_DESCRIPTION</description>
         <files>
                 <filename module="mod_jdownloads_latest">mod_jdownloads_latest.php</filename>

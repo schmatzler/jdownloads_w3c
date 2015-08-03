@@ -8,7 +8,8 @@ global $jlistConfig;
 
 // Load the tooltip behavior.
 JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHTML::_('behavior.formvalidation');
+// JHtml::_('behavior.formvalidator'); Joomla >= 3.4
 $canDo = jdownloadsHelper::getActions();
 
 jimport( 'joomla.form.form' );
@@ -181,10 +182,17 @@ $star = '<span class="star">*</span>';
             
                 <?php echo '<p class="inputbox">'.JText::_('COM_JDOWNLOADS_USERGROUPS_GROUP_CREATION_SETTINGS_NOTE').'</p>'; ?>
                 
+                <li><input type="hidden" name="jform[uploads_view_upload_icon]" value="0">
+                <?php echo $this->form->getLabel('uploads_view_upload_icon'); ?>
+                <?php echo $this->form->getInput('uploads_view_upload_icon'); ?></li>
+
                 <li><input type="hidden" name="jform[uploads_can_change_category]" value="0">
                 <?php echo $this->form->getLabel('uploads_can_change_category'); ?>
                 <?php echo $this->form->getInput('uploads_can_change_category'); ?></li>
 
+                <li><input type="hidden" name="jform[uploads_allow_custom_tags]" value="0">
+                <?php echo $this->form->getLabel('uploads_allow_custom_tags'); ?>
+                <?php echo $this->form->getInput('uploads_allow_custom_tags'); ?></li>
                 
                 <li><input type="hidden" name="jform[uploads_auto_publish]" value="0">
                 <?php echo $this->form->getLabel('uploads_auto_publish'); ?>
@@ -197,6 +205,10 @@ $star = '<span class="star">*</span>';
                 <li><input type="hidden" name="jform[uploads_use_tabs]" value="0">
                 <?php echo $this->form->getLabel('uploads_use_tabs'); ?>
                 <?php echo $this->form->getInput('uploads_use_tabs'); ?></li>            
+
+                <li>
+                <?php echo $this->form->getLabel('uploads_default_access_level'); ?>
+                <?php echo $this->form->getInput('uploads_default_access_level'); ?></li>                 
             
                 <li>
                 <?php echo $this->form->getLabel('uploads_allowed_types'); ?>
@@ -420,6 +432,10 @@ $star = '<span class="star">*</span>';
                 <li><input type="hidden" name="jform[form_robots]" value="0">
                 <?php echo $this->form->getLabel('form_robots'); ?>
                 <?php echo $this->form->getInput('form_robots'); ?></li>
+                
+                <li><input type="hidden" name="jform[form_tags]" value="0">
+                <?php echo $this->form->getLabel('form_tags'); ?>
+                <?php echo $this->form->getInput('form_tags'); ?></li>                
 
                 <?php echo $this->form->getLabel('spacer1'); ?>
                 <?php echo '<p class="inputbox">'.JText::_('COM_JDOWNLOADS_USERGROUPS_GROUP_CREATION_SETTINGS_DESC2').'</p>'; ?>

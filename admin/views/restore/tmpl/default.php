@@ -19,7 +19,8 @@ defined('_JEXEC') or die('Restricted access');
 
 global $jlistConfig; 
 
-JHtml::_('behavior.formvalidation');
+JHTML::_('behavior.formvalidation');
+// JHtml::_('behavior.formvalidator'); Joomla >= 3.4
 JHtml::_('behavior.tooltip');
 
 ?>

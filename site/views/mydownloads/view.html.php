@@ -36,6 +36,8 @@ class jdownloadsViewMyDownloads extends JViewLegacy
         
         $app    = JFactory::getApplication();
         $user    = JFactory::getUser();
+        
+        $jd_user_settings = JDHelper::getUserRules();
 
         // Initialise variables
         $state        = $this->get('State');
@@ -47,26 +49,28 @@ class jdownloadsViewMyDownloads extends JViewLegacy
             return false;            
         }        
         
-        $this->ipad_user = false;
-        
+        // upload icon handling
         $this->view_upload_button = false;
         
-        if (!$user->guest){
+        if ($jd_user_settings->uploads_view_upload_icon){
             // we must here check whether the user has the permissions to create new downloads 
             // this can be defined in the components permissions but also in any category
-            
+            // but the upload icon is only viewed when in the user groups settings is also activated the: 'display add/upload icon' option
+                
             // 1. check the component permissions
             if (!$user->authorise('core.create', 'com_jdownloads')){
                 // 2. not global permissions so we must check now every category (for a lot of categories can this be very slow)
                 $this->authorised_cats = JDHelper::getAuthorisedJDCategories('core.create', $user);
-                if (count($this->authorised_cats > 0)){
+                if (count($this->authorised_cats) > 0){
                     $this->view_upload_button = true;
                 }
             } else {
                 $this->view_upload_button = true;
-            }
-        }          
-        
+            }        
+        }
+                             
+        $this->ipad_user = false;
+
         // check whether we have an ipad/iphone user for flowplayer aso...
         if ((bool) strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') || (bool) strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone')){        
             $this->ipad_user = true;
@@ -128,6 +132,10 @@ class jdownloadsViewMyDownloads extends JViewLegacy
         for ($i = 0, $n = count($items); $i < $n; $i++)
         {
             $item = &$items[$i];
+            
+            $item->tags = new JHelperTags;
+            $item->tags->getItemTags('com_jdownloads.download', $item->file_id);
+            
             $item->slug = $item->file_alias ? ($item->file_id . ':' . $item->file_alias) : $item->file_id;
 
             // No link for ROOT category

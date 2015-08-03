@@ -536,8 +536,8 @@ class jdownloadsControllerDownload extends JControllerForm
 
                 // get standard points value from AUP
                 $db->setQuery("SELECT points FROM #__alpha_userpoints_rules WHERE published = 1 AND plugin_function = 'plgaup_jdownloads_user_download'");
-                $aup_fix_points = (int)$db->loadResult();
-                $aup_fix_points = abs($aup_fix_points);
+                $aup_fix_points = floatval($db->loadResult());
+                //$aup_fix_points = JDHelper::strToNumber($aup_fix_points);
             }
         }    
 
@@ -593,7 +593,7 @@ class jdownloadsControllerDownload extends JControllerForm
                         if ($profile->points >= $sum_points){
                             foreach($files as $aup_data){
                                 $db->setQuery("SELECT price FROM #__jdownloads_files WHERE file_id = '$aup_data->file_id'");
-                                if ($price = (int)$db->loadResult()){
+                                if ($price = floatval($db->loadResult())){
                                     $can_download = JDHelper::setAUPPointsDownloads($user->id, $aup_data->file_title, $aup_data->file_id, $price, $profile);
                                 }                                                   
                             }
@@ -721,9 +721,9 @@ class jdownloadsControllerDownload extends JControllerForm
            // Is AUP rule or price option used - we need the price for it
            if ($aup_exist){
                if ($jlistConfig['use.alphauserpoints.with.price.field']){
-                   $price = (int)$files[0]->price;
+                   $price = floatval($files[0]->price);
                } else {
-                   $price = (int)$aup_fix_points;
+                   $price = $aup_fix_points;
                }        
            }    
             
@@ -743,8 +743,7 @@ class jdownloadsControllerDownload extends JControllerForm
         // load external plugins
         $dispatcher = JDispatcher::getInstance();
         JPluginHelper::importPlugin('jdownloads');
-        $results = $dispatcher->trigger('onBeforeDownloadIsSendJD', array($files, $can_download, $user_rules, $download_in_parts));  // 
-            
+        $results = $dispatcher->trigger('onBeforeDownloadIsSendJD', array(&$files, &$can_download, $user_rules, $download_in_parts));    
         
         if (!$can_download){
             $msg = JText::_('COM_JDOWNLOADS_BACKEND_SET_AUP_FE_MESSAGE_NO_DOWNLOAD');
@@ -760,7 +759,12 @@ class jdownloadsControllerDownload extends JControllerForm
 
                 // give uploader AUP points when is set on
                 if ($jlistConfig['use.alphauserpoints']){
-                    JDHelper::setAUPPointsDownloaderToUploader($files);  
+                    if ($jlistConfig['use.alphauserpoints.with.price.field']){
+                        JDHelper::setAUPPointsDownloaderToUploaderPrice($files);
+                    } else {    
+                        JDHelper::setAUPPointsDownloaderToUploader($files);
+                    }
+                      
                 }
 
                 // write data in log 

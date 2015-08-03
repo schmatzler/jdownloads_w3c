@@ -28,7 +28,6 @@
                 <field name="show_description" type="list"
                     description="COM_JDOWNLOADS_SHOW_CATEGORY_DESCRIPTION_DESC"
                     label="COM_JDOWNLOADS_SHOW_CATEGORY_DESCRIPTION_LABEL" >
-                    
                     <option value="1">COM_JDOWNLOADS_SHOW</option>
                     <option value="0">COM_JDOWNLOADS_HIDE</option>
                 </field>
@@ -36,10 +35,17 @@
                 <field name="show_subcat_desc" type="list"
                     description="COM_JDOWNLOADS_SHOW_SUBCATEGORY_DESCRIPTIONS_DESC"
                     label="COM_JDOWNLOADS_SHOW_SUBCATEGORY_DESCRIPTIONS_LABEL" >
-                    
                     <option value="1">COM_JDOWNLOADS_SHOW</option>
                     <option value="0">COM_JDOWNLOADS_HIDE</option>
                 </field>
+                
+                <field name="show_cat_tags" type="list"
+                    label="JGLOBAL_SHOW_TAGS_LABEL"
+                    description="JGLOBAL_SHOW_TAGS_DESC" >
+                    <option value="">COM_JDOWNLOADS_USE_GLOBAL</option>
+                    <option value="0">COM_JDOWNLOADS_HIDE</option>
+                    <option value="1">COM_JDOWNLOADS_SHOW</option>
+                </field>                
                 
                 <!-- <field name="show_empty_categories" type="list"
                     label="COM_JDOWNLOADS_SHOW_EMPTY_CATEGORIES_LABEL"
@@ -113,6 +119,16 @@
                     <option value="0">COM_JDOWNLOADS_HIDE</option>
                     <option value="1">COM_JDOWNLOADS_SHOW</option>
                 </field>
+                
+                <field
+                    name="show_tags"
+                    type="list"
+                    label="JGLOBAL_SHOW_TAGS_LABEL"
+                    description="JGLOBAL_SHOW_TAGS_DESC">
+                    <option value="">COM_JDOWNLOADS_USE_GLOBAL</option>
+                    <option value="0">COM_JDOWNLOADS_HIDE</option>
+                    <option value="1">COM_JDOWNLOADS_SHOW</option>
+                </field>                 
                 
                 <field name="show_pagination" type="list"
                     description="COM_JDOWNLOADS_PAGINATION_DESC"

@@ -2,12 +2,12 @@
 <extension type="module" client="site" version="3.1" method="upgrade">
         <name>jDownloads Top</name>
         <author>Arno Betz</author>
-        <creationDate>2015-02-26</creationDate>
+        <creationDate>2015-06-12</creationDate>
         <copyright>(C) 2009-2015 by Arno Betz. All rights reserved.</copyright>
         <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
         <authorEmail>info@jDownloads.com</authorEmail>
         <authorUrl>www.jDownloads.com</authorUrl>
-        <version>3.2.27</version>
+        <version>3.2.34</version>
         <description>MOD_JDOWNLOADS_TOP_XML_DESCRIPTION</description>
         <files>
                 <filename module="mod_jdownloads_top">mod_jdownloads_top.php</filename>

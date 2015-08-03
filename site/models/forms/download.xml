@@ -102,6 +102,13 @@
             <option value="*">COM_JDOWNLOADS_ALL</option>
         </field>
        
+        <field name="tags" custom="allow" mode="ajax"
+            type="tag"
+            label="JTAG"
+            description="JTAG_DESC"
+            class="inputbox"
+            multiple="true" />
+       
         <field 
             name="ordering"
             type="Ordering" 
@@ -149,14 +156,6 @@
                 <option value="noindex, nofollow">COM_JDOWNLOADS_NOINDEX_NOFOLLOW</option>
             </field>            
             
-        <field
-            name="tags"
-            type="text"
-            class="inputbox" 
-            size="60"            
-            label="COM_JDOWNLOADS_BACKEND_FILESEDIT_TAGS_LABEL"
-            description="COM_JDOWNLOADS_BACKEND_FILESEDIT_TAGS_DESC" />            
-
         <field
             name="created_id"
             type="user"

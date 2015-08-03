@@ -144,7 +144,7 @@
         
         // components description
         if ($jlistConfig['downloads.titletext'] != '') {
-            $header_text = stripslashes($jlistConfig['downloads.titletext']);
+            $header_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.titletext']));
             if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
                 $header_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $header_text);
             } else {
@@ -166,7 +166,8 @@
 
         $header = str_replace('{home_link}', $home_link, $header);
         $header = str_replace('{search_link}', $search_link, $header);
-        if ($jlistConfig['frontend.upload.active']) {
+        
+        if ($jd_user_settings->uploads_view_upload_icon){
             if ($this->view_upload_button){
                 $header = str_replace('{upload_link}', $upload_link, $header);
             } else {
@@ -398,6 +399,14 @@
             // get the activated/selected "files" layout text to build the output for every download
             $html_file = str_replace('{file_id}',$files[$i]->file_id, $event.$layout_files_text);
             
+            // render the tags
+            if ($params->get('show_tags', 1) && !empty($files[$i]->tags->itemTags)){ 
+                $files[$i]->tagLayout = new JLayoutFile('joomla.content.tags');
+                $html_file = str_replace('{tags}', $files[$i]->tagLayout->render($files[$i]->tags->itemTags), $html_file);
+            } else {
+                $html_file = str_replace('{tags}', '', $html_file);
+            }            
+            
             // files title row info only view when it is the first file
             if ($i > 0){
                 // remove all html tags in top cat output
@@ -468,7 +477,7 @@
             }
 
             // display the thumbnails
-            $html_file = JDHelper::placeThumbs($html_file, $files[$i]->images);                                                    
+            $html_file = JDHelper::placeThumbs($html_file, $files[$i]->images, 'list');                                                    
 
             // support for content plugins in description / here in the files list layout is only used the short description
             if ($jlistConfig['activate.general.plugin.support'] && $jlistConfig['use.general.plugin.support.only.for.descriptions']) {  
@@ -1080,8 +1089,8 @@
                 }    
             }
             
-            $html_file = str_replace('{downloads}',$pic_downloads.JDHelper::strToNumber($files[$i]->downloads), $html_file);
-            $html_file = str_replace('{hits_value}',$pic_downloads.JDHelper::strToNumber($files[$i]->downloads), $html_file);            
+            $html_file = str_replace('{downloads}',$pic_downloads.JDHelper::strToNumber((int)$files[$i]->downloads), $html_file);
+            $html_file = str_replace('{hits_value}',$pic_downloads.JDHelper::strToNumber((int)$files[$i]->downloads), $html_file);            
             $html_file = str_replace('{ordering}',$files[$i]->ordering, $html_file);
             $html_file = str_replace('{published}',$files[$i]->published, $html_file);
             
@@ -1190,7 +1199,7 @@
 
     // components footer text
     if ($jlistConfig['downloads.footer.text'] != '') {
-        $footer_text = stripslashes($jlistConfig['downloads.footer.text']);
+        $footer_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.footer.text']));
         if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
             $footer_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $footer_text);
         } else {

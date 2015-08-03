@@ -215,7 +215,13 @@ class jdownloadsModelDownload extends JModelAdmin
                 'download' => array(),
             ); 
         }
-        
+
+       
+        if ((!empty($data['tags']) && $data['tags'][0] != ''))
+        {
+            $table->newTags = $data['tags'];
+        } 
+
         // Bind the data.
         if (!$table->bind($data)) {
             $this->setError($table->getError());
@@ -677,7 +683,14 @@ class jdownloadsModelDownload extends JModelAdmin
      */
     public function getItem($pk = null)
     {
-        $item = parent::getItem($pk); 
+        $item = parent::getItem($pk);
+        
+        if ($item->file_id){
+            $registry = new JRegistry;
+            // get the tags
+            $item->tags = new JHelperTags;
+            $item->tags->getTagIds($item->file_id, 'com_jdownloads.download');         
+        }        
 
         return $item;
     }                           

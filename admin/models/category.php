@@ -108,6 +108,25 @@ class jdownloadsModelcategory extends JModelAdmin
         return $form;
     }
     
+    /**
+     * Method to get a single record.
+     *
+     * @param    integer    The id of the primary key.
+     * @return    mixed    Object on success, false on failure.
+     */
+    public function getItem($pk = null)
+    {
+        $item = parent::getItem($pk);
+        
+        if ($item->id){
+            $registry = new JRegistry;
+            // get the tags
+            $item->tags = new JHelperTags;
+            $item->tags->getTagIds($item->id, 'com_jdownloads.category');         
+        }        
+
+        return $item;
+    }      
     
     /**
      * Method to get the data that should be injected in the form.
@@ -265,6 +284,11 @@ class jdownloadsModelcategory extends JModelAdmin
             $data['title']    = $title;
             $data['alias']    = $alias;
         }
+        
+        if ((!empty($data['tags']) && $data['tags'][0] != ''))
+        {
+            $table->newTags = $data['tags'];
+        }         
 
         // Bind the data.
         if (!$table->bind($data)) {

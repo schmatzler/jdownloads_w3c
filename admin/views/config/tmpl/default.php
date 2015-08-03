@@ -16,7 +16,8 @@ defined('_JEXEC') or die('Restricted access');
 global $jlistConfig; 
 
 JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHTML::_('behavior.formvalidation');
+// JHtml::_('behavior.formvalidator'); Joomla >= 3.4
 jimport( 'joomla.html.html.tabs' );
 $canDo      = JDownloadsHelper::getActions();
 
@@ -524,14 +525,14 @@ if ($canDo->get('edit.config')){
                         </td>                
                         </tr>
                         
-                        <tr>
+                        <!-- <tr>
                         <td width="330"><strong><?php echo JText::_('COM_JDOWNLOADS_BACKEND_SET_SEF_ROUTER_OPTION_TITLE')." "; ?></strong><br />
                              <?php echo JDownloadsHelper::yesnoSelectList( 'jlistConfig[use.sef.with.file.titles]', 'class="inputbox"', $jlistConfig['use.sef.with.file.titles']); ?>
                         </td>
                         <td>
                                <?php echo JText::_('COM_JDOWNLOADS_BACKEND_SET_SEF_ROUTER_OPTION_DESC');?>
                         </td>                
-                        </tr> 
+                        </tr> --> 
                         
                         <tr>
                         <td width="330"><strong><?php echo JText::_('COM_JDOWNLOADS_BACKEND_SETTINGS_USE_REAL_NAME_IN_FRONTEND')." "; ?></strong><br />

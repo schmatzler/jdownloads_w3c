@@ -85,6 +85,7 @@ class jdownloadsModelMyDownloads extends JModelList
 
         $this->setState('params', $mergedParams);
         $user        = JFactory::getUser();
+        
         $listOrderNew = false;
                 
         // Create a new query object.
@@ -205,7 +206,7 @@ class jdownloadsModelMyDownloads extends JModelList
             } else {
                 $limit = (int)$jlistConfig['files.per.side'];
             }
-        }        
+        }
         
         $this->setState('list.limit', $limit);
 
@@ -252,7 +253,7 @@ class jdownloadsModelMyDownloads extends JModelList
 	 */
 	function getListQuery()
 	{
-		global $jlistConfig;
+		global $jlistConfig; 
         
         // Create a new query object.
 		$db = $this->getDbo();
@@ -272,11 +273,10 @@ class jdownloadsModelMyDownloads extends JModelList
                 'a.custom_field_2, a.custom_field_3, a.custom_field_4, a.custom_field_5, a.custom_field_6, a.custom_field_7, a.custom_field_8, a.custom_field_9, '.
                 'a.custom_field_10, a.custom_field_11, a.custom_field_12, a.custom_field_13, a.custom_field_14, a.access, a.language, a.ordering, '.                
                 'a.published, a.checked_out, a.checked_out_time, ' .
-                
 				// use date_added if modified_date is 0
                 // 'CASE WHEN a.modified_date = 0 THEN a.date_added ELSE a.modified_date END as modified, ' .
-                'a.modified_date as modified, ' .				
-                'a.modified_id,' .
+                'a.modified_date as modified, ' .
+   				'a.modified_id,' .
 				// use date_added if publish_from is 0
 				'CASE WHEN a.publish_from = 0 THEN a.date_added ELSE a.publish_from END as publish_from,' .
 					'a.publish_to, a.images, a.metakey, a.metadesc, a.access, ' .
@@ -298,13 +298,17 @@ class jdownloadsModelMyDownloads extends JModelList
 		}
 
 		$query->from('#__jdownloads_files AS a');
+        
+        // Join on files table.
+        $query->select('aa.url_download AS filename_from_other_download');
+        $query->join('LEFT', '#__jdownloads_files AS aa on aa.file_id = a.other_file_id');        
 
 		// Join over the categories.
 		$query->select('c.title AS category_title, c.access AS category_access, c.alias AS category_alias, c.cat_dir AS category_cat_dir, c.cat_dir_parent AS category_cat_dir_parent');
 		$query->join('LEFT', '#__jdownloads_categories AS c ON c.id = a.cat_id');
-
-        $query->join('LEFT', '#__users AS ua ON ua.id = a.created_id');
-        $query->join('LEFT', '#__users AS uam ON uam.id = a.modified_id');
+        
+		$query->join('LEFT', '#__users AS ua ON ua.id = a.created_id');
+		$query->join('LEFT', '#__users AS uam ON uam.id = a.modified_id');
 
         // Join on user table.
         if ($jlistConfig['use.real.user.name.in.frontend']){
@@ -320,7 +324,7 @@ class jdownloadsModelMyDownloads extends JModelList
             $query->select('u2.username AS modifier');
         } 
         $query->select('u2.name AS modifier');
-        $query->join('LEFT', '#__users AS u2 on u2.id = a.modified_id'); 
+        $query->join('LEFT', '#__users AS u2 on u2.id = a.modified_id');        
         
         // Join on license table.
         $query->select('l.title AS license_title, l.url AS license_url, l.description AS license_text');
@@ -337,11 +341,6 @@ class jdownloadsModelMyDownloads extends JModelList
         // Join on menu table. We need the single category menu itemid when exist                                                                                                  
         $query->select('menuf.id AS menuf_itemid');
         $query->join('LEFT', '#__menu AS menuf on menuf.link LIKE CONCAT(\'index.php?option=com_jdownloads&view=download&id=\',a.file_id,\'%\') AND menuf.published = 1 AND menuf.access IN ('.$groups.')') ;
-        
-
-		// Join on voting table
-		//$query->select('ROUND(v.rating_sum / v.rating_count, 0) AS rating, v.rating_count as rating_count');
-		//$query->join('LEFT', '#__content_rating AS v ON a.id = v.content_id');
 
 		// Join to check for category published state in parent categories up the tree
 		$query->select('c.published, CASE WHEN badcats.id is null THEN c.published ELSE 0 END AS parents_published');
@@ -487,10 +486,12 @@ class jdownloadsModelMyDownloads extends JModelList
         if ($this->getState('only_uncategorised')) {
             $query->where('a.cat_id = 1');
         }
-        
-		// Add the list ordering clause.
-		$query->order($this->getState('list.ordering', 'a.ordering').' '.$this->getState('list.direction', 'ASC'));
 
+		// Add the list ordering clause.
+        $order = $this->getState('list.ordering', 'a.ordering').' '.$this->getState('list.direction', 'ASC');
+        $order = str_replace('DESC   DESC','DESC', $order);
+        $query->order($order);
+		
 		return $query;
 	}
 
@@ -541,7 +542,6 @@ class jdownloadsModelMyDownloads extends JModelList
 				if ($user->authorise('core.edit', $asset)) {
 					$item->params->set('access-edit', true);
 				}
-                
 				// Now check if edit.own is available.
 				elseif (!empty($userId) && $user->authorise('core.edit.own', $asset)) {
 					// Check for a valid user and that they are the owner.
@@ -571,6 +571,10 @@ class jdownloadsModelMyDownloads extends JModelList
 					$item->params->set('access-view', in_array($item->access, $groups) && in_array($item->category_access, $groups));
 				}
 			}
+            
+            // Get the tags
+            $item->tags = new JHelperTags;
+            $item->tags->getItemTags('com_jdownloads.download', $item->file_id);            
 		}
 
 		return $items;

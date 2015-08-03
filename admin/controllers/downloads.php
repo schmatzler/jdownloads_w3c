@@ -69,6 +69,45 @@ class jdownloadsControllerdownloads extends JControllerAdmin
         }
         $this->setRedirect( 'index.php?option=com_jdownloads&view=downloads', $msg, $error);       
     }
+    
+   /**
+    * Method to publish a list of items
+    *
+    * @return  void
+    *
+    */    
+    public function publish()
+    {
+        global $jlistConfig;
+        
+        require_once JPATH_COMPONENT_SITE.'/helpers/jdownloadshelper.php';
+        
+        // Check for request forgeries
+        JSession::checkToken() or die(JText::_('JINVALID_TOKEN'));
+                
+        // Get items to publish from the request.
+        $cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+        $data = array('publish' => 1, 'unpublish' => 0);
+        $task = $this->getTask();
+        $state = JArrayHelper::getValue($data, $task, 0, 'int');        
+        
+        if (empty($cid)){
+            JLog::add(JText::_('JGLOBAL_NO_ITEM_SELECTED'), JLog::WARNING, 'jerror');
+            $this->setRedirect(JRoute::_('index.php?option=com_jdownloads&view=downloads', false));
+        } else {
+            if ($state == 1 && $jlistConfig['use.alphauserpoints']){
+                // load the model
+                $model = $this->getModel();
+                foreach ($cid as $id){
+                    // load the items data
+                    $item = $model->getItem($id);
+                    // add the AUP points
+                    JDHelper::setAUPPointsUploads($item->submitted_by, $item->file_title);
+                }
+            }
+            parent::publish();
+        }        
+    }    
     	
 }
 ?>

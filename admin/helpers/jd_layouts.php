@@ -28,6 +28,7 @@ $JLIST_BACKEND_SETTINGS_TEMPLATES_CATS_DEFAULT = '{cat_title_begin}<div style="b
   <tr valign="top" border="0px">
     <td colspan="3" width="100%" style="padding:5px;">{cat_description}</td>
   </tr>
+  <tr><td>{tags}</td></tr>
 </table>
 {cat_info_end}';
 
@@ -42,6 +43,7 @@ $JLIST_BACKEND_SETTINGS_TEMPLATES_CAT_DEFAULT = '{cat_title_begin}<div style="ba
   <tr valign="top" border="0px">
     <td colspan="3" width="100%" style="padding:5px;">{cat_description}</td>
   </tr>
+{tags}
 </table>
 {cat_info_end}
 {sub_categories}
@@ -74,6 +76,7 @@ $JLIST_BACKEND_SETTINGS_TEMPLATES_FILES_DEFAULT = '{files_title_begin}<div style
             {url_download}
         </td>
      </tr>
+     <tr><td>{tags}</td></tr>
 </table>';  
 
 $JLIST_BACKEND_SETTINGS_TEMPLATES_SUMMARY_DEFAULT = '<div class="jd_cat_title" style="padding:5px; font-size:10px; font-weight:normal;">{summary_pic} {title_text}</div>
@@ -143,7 +146,8 @@ $JLIST_BACKEND_SETTINGS_TEMPLATES_DETAILS_DEFAULT = '<table class="jdtable" bord
         </td>
     </tr>
     </tbody>
-</table>';
+</table>
+{tags}';
 
 $JLIST_BACKEND_SETTINGS_TEMPLATES_DETAILS_DEFAULT_WITH_TABS = '<table width="100%" border="0" cellpadding="0" cellspacing="5">
   <tr>
@@ -151,7 +155,7 @@ $JLIST_BACKEND_SETTINGS_TEMPLATES_DETAILS_DEFAULT_WITH_TABS = '<table width="100
     <td valign="top">{rating}</td>
   </tr>
 </table>
-
+{tags}
 {tabs begin}
 
 {tab description}
@@ -318,7 +322,7 @@ $JLIST_BACKEND_SETTINGS_TEMPLATES_DETAILS_DEFAULT_WITH_TABS = '<table width="100
 $JLIST_BACKEND_SETTINGS_TEMPLATES_DETAILS_DEFAULT_NEW_25 = '<div style="padding-top:15px;padding-bottom:10px;" height="38" colspan="3" valign="top"><span style="font-weight: bold;font-size:13pt;">{file_pic} {file_title} {pic_is_new} {pic_is_hot} {pic_is_updated}</span>
      <div style="float: right;">{rating}</div>
 </div>
-
+{tags}
 <div>{description_long}</div>
 <div>{mp3_player}</div>
 <div>{mp3_id3_tag}</div>
@@ -438,6 +442,7 @@ $JLIST_BACKEND_SETTINGS_TEMPLATES_FILES_DEFAULT_NEW_SIMPLE_1 = '{files_title_beg
           <p align="center">{checkbox_list}</p>
       </td>
    </tr>
+   <tr><td>{tags}</td></tr>
 </table>
 <table width="100%" style="padding:3px;">    
    <tr>
@@ -461,6 +466,7 @@ $JLIST_BACKEND_SETTINGS_TEMPLATES_FILES_DEFAULT_NEW_SIMPLE_2 = '{files_title_beg
           <p align="center">{url_download}</p>
       </td>
    </tr>
+   <tr><td>{tags}</td></tr>
 </table>
 <table width="100%" style="padding:3px;">    
    <tr>
@@ -681,7 +687,7 @@ $JLIST_BACKEND_SETTINGS_TEMPLATES_FILES_NEW_ALTERNATE_1_BEFORE = '<div id="jd">
 $JLIST_BACKEND_SETTINGS_TEMPLATES_FILES_NEW_ALTERNATE_1 = '{files_title_begin}<div style="background-color:#EFEFEF; padding:6px; border-width:1px;border-bottom-style:solid; border-color: #cccccc;">
 {files_title_text}</div>{files_title_end}
 
-<div class="row">
+<div class="jd_row">
     <div class="width100 first-cell">
         <div class="teaser-item">
         <div class="pos-media media-left">
@@ -713,6 +719,9 @@ $JLIST_BACKEND_SETTINGS_TEMPLATES_FILES_NEW_ALTERNATE_1 = '{files_title_begin}<d
                   {screenshot_begin}<a href="{screenshot}" rel="lightbox"> <img class="list-img" src="{thumbnail}" /></a>{screenshot_end} {description}
             </li>
         </ul>
+        <div>
+            {tags}
+        </div>
         <div class="pos-button">
              {link_to_details}
         </div>

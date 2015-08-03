@@ -17,7 +17,8 @@ global $jlistConfig;
 
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHTML::_('behavior.formvalidation');
+// JHtml::_('behavior.formvalidator'); Joomla >= 3.4
 JHtml::_('behavior.keepalive');
 
 $admin_images_folder = JURI::root().'administrator/components/com_jdownloads/assets/images/';
@@ -116,6 +117,9 @@ $admin_images_folder = JURI::root().'administrator/components/com_jdownloads/ass
                 <!--<li><?php echo $this->form->getLabel('ordering'); ?>
                 <?php echo $this->form->getInput('ordering'); ?></li>
                 -->
+
+                <li><?php echo $this->form->getLabel('tags'); ?>
+                <?php echo $this->form->getInput('tags'); ?></li>                
                 
                 <li><?php echo $this->form->getLabel('language'); ?>
                 <?php echo $this->form->getInput('language'); ?></li>
@@ -153,7 +157,7 @@ $admin_images_folder = JURI::root().'administrator/components/com_jdownloads/ass
                  echo $this->form->getInput('description'); 
                  ?>       
             </div>
-
+            <div class="clr"></div>
             <div>
                 <b><?php echo $this->form->getLabel('description_long'); ?></b>
                  <?php 
@@ -225,8 +229,6 @@ $admin_images_folder = JURI::root().'administrator/components/com_jdownloads/ass
                     <li><?php echo $this->form->getLabel('publish_to'); ?>
                     <?php echo $this->form->getInput('publish_to'); ?></li>                 
 
-                    <li><?php echo $this->form->getLabel('spacer'); ?></li>                    
-                    
                     <li><?php echo $this->form->getLabel('views'); ?>
                     <?php echo $this->form->getInput('views'); ?></li>
 
@@ -372,7 +374,7 @@ $admin_images_folder = JURI::root().'administrator/components/com_jdownloads/ass
 
                 <li><?php echo $this->form->getLabel('picnew'); ?> 
                 <input name="picnew" size="30"  type="file"/>
-                <?php // echo $this->form->getInput('picnew'); ?></li>
+                </li>
                 
                  <li><?php echo $this->form->getLabel('spacer'); ?></li>
 
@@ -382,9 +384,6 @@ $admin_images_folder = JURI::root().'administrator/components/com_jdownloads/ass
                 <li><?php echo $this->form->getLabel('password'); ?>
                <?php echo $this->form->getInput('password'); ?></li>
 
-                <li><?php echo $this->form->getLabel('tags'); ?>
-                    <?php echo $this->form->getInput('tags'); ?></li>
-                
                 <li><?php echo $this->form->getLabel('notes'); ?>
                 <?php echo $this->form->getInput('notes'); ?></li>
             </ul>

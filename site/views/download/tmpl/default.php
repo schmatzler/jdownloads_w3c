@@ -24,6 +24,9 @@ setlocale(LC_ALL, 'C.UTF-8', 'C');
     $jinput     = JFactory::getApplication()->input;
     $app        = JFactory::getApplication();    
     $user       = JFactory::getUser();
+
+    // get jD user limits and settings
+    $jd_user_settings = JDHelper::getUserRules();
     
     $jdownloads_root_dir_name = basename($jlistConfig['files.uploaddir']);
     
@@ -139,7 +142,7 @@ setlocale(LC_ALL, 'C.UTF-8', 'C');
         
         // components description
         if ($jlistConfig['downloads.titletext'] != '') {
-            $header_text = stripslashes($jlistConfig['downloads.titletext']);
+            $header_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.titletext']));
             if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
                 $header_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $header_text);
             } else {
@@ -161,7 +164,8 @@ setlocale(LC_ALL, 'C.UTF-8', 'C');
 
         $header = str_replace('{home_link}', $home_link, $header);
         $header = str_replace('{search_link}', $search_link, $header);
-        if ($jlistConfig['frontend.upload.active']) {
+
+        if ($jd_user_settings->uploads_view_upload_icon){
             if ($this->view_upload_button){
                 $header = str_replace('{upload_link}', $upload_link, $header);
             } else {
@@ -374,7 +378,7 @@ setlocale(LC_ALL, 'C.UTF-8', 'C');
         }   
         
         $body = str_replace('{price_value}', $this->item->price, $body);
-        $body = str_replace('{views_value}',JDHelper::strToNumber($this->item->views), $body);
+        $body = str_replace('{views_value}',JDHelper::strToNumber((int)$this->item->views), $body);
         $body = str_replace('{details_block_title}', JText::_('COM_JDOWNLOADS_FE_DETAILS_DATA_BLOCK_TITLE'), $body);
         if ($this->item->url_download){
             $body = str_replace('{file_name}', JDHelper::getShorterFilename($this->item->url_download), $body);
@@ -387,10 +391,19 @@ setlocale(LC_ALL, 'C.UTF-8', 'C');
         $body = str_replace('{filesize_value}', $this->item->size, $body);
         $body = str_replace('{created_by_value}', $this->item->creator, $body);    
         $body = str_replace('{modified_by_value}', $this->item->modifier, $body);
-        $body = str_replace('{hits_value}',JDHelper::strToNumber($this->item->downloads), $body);         
+        $body = str_replace('{hits_value}',JDHelper::strToNumber((int)$this->item->downloads), $body);         
         $body = str_replace('{md5_value}',$this->item->md5_value, $body);
         $body = str_replace('{sha1_value}',$this->item->sha1_value, $body);
-        $body = str_replace('{changelog_value}', $this->item->changelog, $body);        
+        $body = str_replace('{changelog_value}', $this->item->changelog, $body);
+        
+        
+        if ($params->get('show_tags', 1) && !empty($this->item->tags->itemTags)){ 
+            $this->item->tagLayout = new JLayoutFile('joomla.content.tags');
+            $body = str_replace('{tags}', $this->item->tagLayout->render($this->item->tags->itemTags), $body);
+        } else {
+            $body = str_replace('{tags}', '', $body);
+        }
+        
         
         $body = str_replace('{cat_title}', $this->item->category_title, $body);  
       //$body = str_replace('{pathway_text}', JText::_('COM_JDOWNLOADS_FE_DETAILS_PATHWAY_TEXT'), $body);
@@ -443,7 +456,7 @@ setlocale(LC_ALL, 'C.UTF-8', 'C');
         }
         
         // place the images
-        $body = JDHelper::placeThumbs($body, $this->item->images);
+        $body = JDHelper::placeThumbs($body, $this->item->images, 'detail');
         
         // pics for: new file / hot file /updated
         $hotpic = '<img src="'.JURI::base().'images/jdownloads/hotimages/'.$jlistConfig['picname.is.file.hot'].'" alt="hotpic" />';
@@ -924,7 +937,7 @@ setlocale(LC_ALL, 'C.UTF-8', 'C');
 
     // components footer text
     if ($jlistConfig['downloads.footer.text'] != '') {
-        $footer_text = stripslashes($jlistConfig['downloads.footer.text']);
+        $footer_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.footer.text']));
         if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
             $footer_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $footer_text);
         } else {

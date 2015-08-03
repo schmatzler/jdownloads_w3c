@@ -5,7 +5,8 @@ defined('_JEXEC') or die('Restricted access');
     //jimport ('joomla.html.html.bootstrap');
     
     JHtml::_('behavior.tooltip');
-    JHtml::_('behavior.formvalidation');
+    JHTML::_('behavior.formvalidation');
+    // JHtml::_('behavior.formvalidator'); Joomla >= 3.4
     JHtml::_('jquery.framework');
 
     ?>

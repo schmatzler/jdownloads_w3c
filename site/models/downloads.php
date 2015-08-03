@@ -244,6 +244,8 @@ class jdownloadsModelDownloads extends JModelList
 		$id .= ':' . $this->getState('filter.author_id.include');
 		$id	.= ':' . serialize($this->getState('filter.author_alias'));
 		$id .= ':' . $this->getState('filter.author_alias.include');
+        $id .= ':' . serialize($this->getState('filter.log_id'));
+        $id .= ':' . $this->getState('filter.log_id.include');
 		$id .= ':' . $this->getState('filter.date_filtering');
 		$id .= ':' . $this->getState('filter.date_field');
 		$id .= ':' . $this->getState('filter.start_date_range');
@@ -345,10 +347,14 @@ class jdownloadsModelDownloads extends JModelList
 		$query->select('parent.title as parent_title, parent.id as parent_id, parent.alias as parent_alias');
 		$query->join('LEFT', '#__jdownloads_categories as parent ON parent.id = c.parent_id');
         
-        // Join on menu table. We need the single category menu itemid when exist                                                                                                  
+        // Join on menu table. We need the single download menu itemid when exist                                                                                                  
         $query->select('menuf.id AS menuf_itemid');
-        $query->join('LEFT', '#__menu AS menuf on menuf.link LIKE CONCAT(\'index.php?option=com_jdownloads&view=download&id=\',a.file_id,\'%\') AND menuf.published = 1 AND menuf.access IN ('.$groups.')') ;
+        $query->join('LEFT', '#__menu AS menuf on menuf.link LIKE CONCAT(\'index.php?option=com_jdownloads&view=download&id=\',a.file_id) AND menuf.published = 1 AND menuf.access IN ('.$groups.')') ;
 
+        // Join on menu table. We need the single category menu itemid when exist                                                                                                  
+        $query->select('menuc.id AS menuc_cat_itemid');
+        $query->join('LEFT', '#__menu AS menuc on menuc.link LIKE CONCAT(\'index.php?option=com_jdownloads&view=category&catid=\',a.cat_id) AND menuc.published = 1 AND menuc.access IN ('.$groups.')') ;
+        
 		// Join to check for category published state in parent categories up the tree
 		$query->select('c.published, CASE WHEN badcats.id is null THEN c.published ELSE 0 END AS parents_published');
 		$subquery = 'SELECT cat.id as id FROM #__jdownloads_categories AS cat JOIN #__jdownloads_categories AS parent ';
@@ -421,6 +427,19 @@ class jdownloadsModelDownloads extends JModelList
 		if (!empty($authorWhere)) {
 			$query->where('('.$authorWhere.')');
 		}
+
+        // Filter by log ID - only used in modules
+       $logId = $this->getState('filter.log_id');
+       $logWhere = '';
+       
+        if ($logId){
+               $type = $this->getState('filter.log_id.include', true) ? 'IN' : 'NOT IN';
+               $logWhere = 'a.file_id '.$type.' ('.$logId.')';
+        }
+       
+        if (!empty($logWhere)) {
+            $query->where('('.$logWhere.')');
+        }       
 		
         // Filter by the downloads 'update_active' field   (required for last-updated- module)
         $updated = $this->getState('filter.updated', '0');
@@ -579,6 +598,10 @@ class jdownloadsModelDownloads extends JModelList
 					$item->params->set('access-view', in_array($item->access, $groups) && in_array($item->category_access, $groups));
 				}
 			}
+            
+            // Get the tags
+            $item->tags = new JHelperTags;
+            $item->tags->getItemTags('com_jdownloads.download', $item->file_id);            
 		}
 
 		return $items;

@@ -7,6 +7,7 @@
  
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+require_once JPATH_SITE.'/components/com_jdownloads/helpers/jdownloadshelper.php';
 jimport( 'joomla.plugin.plugin' ); 
 
 class plgSearchJdownloads extends JPlugin
@@ -161,7 +162,7 @@ class plgSearchJdownloads extends JPlugin
                     $case_when1 .= ' ELSE ';
                     $case_when1 .= $c_id.' END as catslug';
 
-                    $query->select('a.file_title AS title, a.metadesc, a.metakey, a.date_added AS created, a.language');
+                    $query->select('a.file_title AS title, a.metadesc, a.metakey, a.date_added AS created, a.language, a.author, a.url_download, a.extern_file, a.password, a.license_agree, a.other_file_id');
                     $query->select($query->concatenate(array('a.description', 'a.description_long')).' AS text');
                     $query->select('CASE c.title WHEN \'root\' THEN '.$db->Quote($uncategorised).' ELSE c.title END AS section, '.$case_when.','.$case_when1.', '.'\'2\' AS browsernav');
 
@@ -171,7 +172,7 @@ class plgSearchJdownloads extends JPlugin
                                 .'AND c.access IN ('.$groups.') '
                                 .'AND (a.publish_from = '.$db->Quote($nullDate).' OR a.publish_from <= '.$db->Quote($now).') '
                                 .'AND (a.publish_to = '.$db->Quote($nullDate).' OR a.publish_to >= '.$db->Quote($now).')' );
-                    $query->group('a.file_id, a.file_title, a.metadesc, a.metakey, a.date_added, a.description, a.description_long, c.title, a.file_alias, c.alias, c.id');
+                    $query->group('a.file_id, a.file_title, a.metadesc, a.metakey, a.date_added, a.description, a.description_long, c.title, a.file_alias, c.alias, c.id, a.author');                    
                     $query->order($order);
 
                     // Filter by language
@@ -186,15 +187,39 @@ class plgSearchJdownloads extends JPlugin
 
                     if (isset($list))
                     {
+                        $jlistConfig = JDHelper::buildjlistConfig();
+                        $user_rules = JDHelper::getUserRules();
+                        
                         foreach($list as $key => $item)
                         {
-                            $list[$key]->href = JDownloadsHelperRoute::getDownloadRoute($item->slug, $item->catslug, $item->language);
+                            $direct_download = $jlistConfig['direct.download'];
+                            if ((!$item->url_download && !$item->extern_file && !$item->other_file_id) || $item->password || $item->license_agree || $user_rules->view_captcha){
+                                // this download is a simple document without a file so we can not use 'direct' download option
+                                // or we need the summary page for password, captcha or license agree
+                                $direct_download = 0;
+                            }
+                            
+                            if ($jlistConfig['view.detailsite']){
+                                // we must link to the details page
+                                $list[$key]->href = JDownloadsHelperRoute::getDownloadRoute($item->slug, $item->catslug, $item->language);
+                            } else {
+                                if ($direct_download){
+                                    // we must start the download process directly
+                                    $list[$key]->href = JRoute::_('index.php?option=com_jdownloads&amp;task=download.send&amp;id='.(int)$item->slug.'&amp;catid='.(int)$item->catslug.'&amp;m=0');                                
+                                } else {
+                                    if (!$item->url_download && !$item->extern_file && !$item->other_file_id){
+                                        // Download is only a simple document without a file so we must link to the details page
+                                        $list[$key]->href = JDownloadsHelperRoute::getDownloadRoute($item->slug, $item->catslug, $item->language);
+                                    } else {
+                                        // we must link to the summary page 
+                                        $list[$key]->href = JRoute::_('index.php?option=com_jdownloads&amp;view=summary&amp;id='.$item->slug.'&amp;catid='.(int)$item->catslug);                                                                
+                                    }
+                                }    
+                            }                            
                         }
                     }
                     $rows[] = $list;
                 }
-
-
 
                 $results = array();
                 if (count($rows))
@@ -203,7 +228,7 @@ class plgSearchJdownloads extends JPlugin
                     {
                         $new_row = array();
                         foreach($row as $key => $download) {
-                            if (searchHelper::checkNoHTML($download, $searchText, array('text', 'title', 'metadesc', 'metakey'))) {
+                            if (searchHelper::checkNoHTML($download, $searchText, array('text', 'title', 'metadesc', 'metakey', 'author'))) {
                                 $new_row[] = $download;
                             }
                         }

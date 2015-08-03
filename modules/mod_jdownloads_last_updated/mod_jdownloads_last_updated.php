@@ -14,14 +14,18 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 require_once __DIR__ . '/helper.php';
 
     $db = JFactory::getDBO();
-    JHTML::_('behavior.tooltip');
-    $current_itemid = JRequest::getVar("Itemid");
-	
+    JHtml::_('behavior.tooltip');
+    $Itemid  = JRequest::getVar("Itemid");
+    
     // get published root menu link
     $db->setQuery("SELECT id from #__menu WHERE link = 'index.php?option=com_jdownloads&view=categories' and published = 1");
     $root_itemid = $db->loadResult();
     
-     // get this option from configuration to see whether the links shall run the download without summary page
+    if ($root_itemid){
+        $Itemid = $root_itemid;
+    }
+    
+    // get this option from configuration to see whether the links shall run the download without summary page
     $db->setQuery("SELECT setting_value FROM #__jdownloads_config WHERE setting_name = 'direct.download'");
     $direct_download_config = $db->loadResult();
     

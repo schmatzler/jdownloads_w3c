@@ -18,7 +18,9 @@ defined('_JEXEC') or die;
     $user       = JFactory::getUser();
     $lang = JFactory::getLanguage();
     $upper_limit = $lang->getUpperLimitSearchWord();
-        
+    
+    // get jD user limits and settings
+    $jd_user_settings = JDHelper::getUserRules();    
 
     $html       = '';
     $layout     = '';
@@ -66,7 +68,7 @@ defined('_JEXEC') or die;
         
         // components description
         if ($jlistConfig['downloads.titletext'] != '') {
-            $header_text = stripslashes($jlistConfig['downloads.titletext']);
+            $header_text = stripslashes(JDHelper::getOnlyLanguageSubstring($jlistConfig['downloads.titletext']));
             if ($jlistConfig['google.adsense.active'] && $jlistConfig['google.adsense.code'] != ''){
                 $header_text = str_replace( '{google_adsense}', stripslashes($jlistConfig['google.adsense.code']), $header_text);
             } else {
@@ -90,7 +92,8 @@ defined('_JEXEC') or die;
         
         $header = str_replace('{home_link}', $home_link, $header);
         $header = str_replace('{search_link}', $search_link, $header);
-        if ($jlistConfig['frontend.upload.active']) {
+        
+        if ($jd_user_settings->uploads_view_upload_icon){
             if ($this->view_upload_button){
                 $header = str_replace('{upload_link}', $upload_link, $header);
             } else {

@@ -521,20 +521,23 @@ class jdownloadsModelSearch extends JModelLegacy
                             $direct_download = 0;
                         }
                         
-                        // check at first whether we must use direct download option
-                        if ($direct_download && !$jlistConfig['view.detailsite']){
-                            //$url_task = 'download.send';
-                            $list[$key]->href = JRoute::_('index.php?option=com_jdownloads&amp;task=download.send&amp;id='.(int)$item->slug.'&amp;catid='.(int)$item->catslug.'&amp;m=0');                                
+                        if ($jlistConfig['view.detailsite']){
+                            // we must link to the details page
+                            $list[$key]->href = JDownloadsHelperRoute::getDownloadRoute($item->slug, $item->catslug, $item->language);
                         } else {
-                            // no direct download - so it is allowed to view the details page?
-                            if ($jlistConfig['view.detailsite']){
-                                $list[$key]->href = JDownloadsHelperRoute::getDownloadRoute($item->slug, $item->catslug, $item->language);
-                            } else { 
-                                // we must link to the downloads category
-                                $list[$key]->href = JDownloadsHelperRoute::getCategoryRoute($item->catslug, true);
-                            }   
-                        }    
-                            
+                            if ($direct_download){
+                                // we must start the download process directly
+                                $list[$key]->href = JRoute::_('index.php?option=com_jdownloads&amp;task=download.send&amp;id='.(int)$item->slug.'&amp;catid='.(int)$item->catslug.'&amp;m=0');                                
+                            } else {
+                                if (!$item->url_download && !$item->extern_file && !$item->other_file_id){
+                                    // Download is only a simple document without a file so we must link to the details page
+                                    $list[$key]->href = JDownloadsHelperRoute::getDownloadRoute($item->slug, $item->catslug, $item->language);
+                                } else {
+                                    // we must link to the summary page 
+                                    $list[$key]->href = JRoute::_('index.php?option=com_jdownloads&amp;view=summary&amp;id='.$item->slug.'&amp;catid='.(int)$item->catslug);                                                                
+                                }
+                            }    
+                        }                        
                     }
                 }
                 $rows[] = $list;
